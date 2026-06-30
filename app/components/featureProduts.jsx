@@ -1,33 +1,38 @@
 "use client";
 
-const products = [
-  {
-    id: 1,
-    name: "Premium Hoodie",
-    price: "$79",
-    image: "https://placehold.co/600x700",
-  },
-  {
-    id: 2,
-    name: "Classic Sneakers",
-    price: "$99",
-    image: "https://placehold.co/600x700",
-  },
-  {
-    id: 3,
-    name: "Leather Backpack",
-    price: "$129",
-    image: "https://placehold.co/600x700",
-  },
-  {
-    id: 4,
-    name: "Minimal Watch",
-    price: "$149",
-    image: "https://placehold.co/600x700",
-  },
-];
+import { useEffect, useState } from "react";
 
-export default function FeaturedProducts() {
+const FeaturedProducts=()=> {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("https://dummyjson.com/products?limit=8");
+        
+        const data = await res.json();
+        console.log(data.products);
+
+        setProducts(data.products);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 text-center">
+        <h2 className="text-2xl font-semibold">Loading Products...</h2>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-6">
@@ -57,8 +62,8 @@ export default function FeaturedProducts() {
               {/* Image */}
               <div className="relative overflow-hidden">
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={product.thumbnail}
+                  alt={product.title}
                   className="h-80 w-full object-cover transition duration-500 group-hover:scale-110"
                 />
 
@@ -70,12 +75,12 @@ export default function FeaturedProducts() {
               {/* Content */}
               <div className="p-5">
                 <h3 className="text-lg font-semibold text-black">
-                  {product.name}
+                  {product.title}
                 </h3>
 
                 <div className="mt-2 flex items-center justify-between">
                   <span className="text-2xl font-bold text-[#e17000]">
-                    {product.price}
+                    ${product.price}
                   </span>
 
                   <button className="rounded-full border border-black px-4 py-2 text-sm font-semibold text-black transition hover:bg-black hover:text-white">
@@ -97,3 +102,4 @@ export default function FeaturedProducts() {
     </section>
   );
 }
+export default FeaturedProducts

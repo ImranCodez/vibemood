@@ -25,11 +25,11 @@ const Navbar = () => {
         </Link>
         <div>
           <div className="flex gap-3"> 
-            <Link className="p-2 bg-black text-" href={"/"} >Home</Link>
-            <Link href={"/"} >cart</Link>
-            <Link href={"/"} >shop</Link>
-            <Link href={"/"} >profile</Link>
-            <Link href={"/"} >admin</Link>
+            <Link className="p-2 bg-black text-[15px] rounded-[7px]" href={"/"} >Home</Link>
+            <Link className="p-2 bg-black text-[15px] rounded-[7px]" href={"/"} >cart</Link>
+            <Link className="p-2 bg-black text-[15px] rounded-[7px]" href={"/"} >shop</Link>
+            <Link className="p-2 bg-black text-[15px] rounded-[7px]" href={"/"} >profile</Link>
+            <Link className="p-2 bg-black text-[15px] rounded-[7px]" href={"/admin"} >admin</Link>
           </div>
         </div>
       </div>

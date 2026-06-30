@@ -6,17 +6,17 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 const Banner=()=>{
-  const settings = {
-    dots: true,
-    infinite: true,
-    autoplay: true,
-    speed: 800,
-    autoplaySpeed: 5000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    pauseOnHover: true,
-  };
+ const settings = {
+  dots: true,
+  infinite: true,
+  autoplay: true,
+  speed: 600,          // Slide animation duration (0.6s)
+  autoplaySpeed: 2000, // Change slide every 2 seconds
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  pauseOnHover: true,
+};
 
   const banners = [
     {

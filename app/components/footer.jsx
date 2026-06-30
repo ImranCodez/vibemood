@@ -3,8 +3,8 @@ export default function Footer() {
     "Home",
     "Shop",
     "Categories",
-    "About",
-    "Contact",
+    "about",
+    "contact",
   ];
 
   const customerService = [
@@ -46,7 +46,7 @@ export default function Footer() {
               {quickLinks.map((item) => (
                 <li key={item}>
                   <a
-                    href="#"
+                    href={`${item}`}
                     className="transition hover:text-[#e17000]"
                   >
                     {item}
