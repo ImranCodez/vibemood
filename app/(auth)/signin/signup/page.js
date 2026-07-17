@@ -1,7 +1,6 @@
-"use client"
 import Link from "next/link";
 
-const SignUpPage=()=>{
+const SignUpPage = () => {
   return (
     <section className="min-h-screen flex">
       {/* Left Side */}
@@ -12,10 +11,10 @@ const SignUpPage=()=>{
           </h1>
 
           <p className="text-gray-300 mt-6 text-lg max-w-md">
-            Join our fashion community and unlock exclusive collections.
+            Join the VibeMood family and explore premium fashion collections
+            crafted for your everyday style.
           </p>
         </div>
-        
       </div>
 
       {/* Right Side */}
@@ -30,6 +29,7 @@ const SignUpPage=()=>{
           </h2>
 
           <form className="mt-8 space-y-5">
+            {/* Full Name */}
             <div>
               <label className="block mb-2 font-medium">
                 Full Name
@@ -37,11 +37,12 @@ const SignUpPage=()=>{
 
               <input
                 type="text"
-                placeholder="Enter full name"
+                placeholder="Enter your full name"
                 className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
               />
             </div>
 
+            {/* Email */}
             <div>
               <label className="block mb-2 font-medium">
                 Email
@@ -49,23 +50,12 @@ const SignUpPage=()=>{
 
               <input
                 type="email"
-                placeholder="Enter email"
+                placeholder="Enter your email"
                 className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
               />
             </div>
 
-            <div>
-              <label className="block mb-2 font-medium">
-                Phone Number
-              </label>
-
-              <input
-                type="text"
-                placeholder="Enter phone number"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
-              />
-            </div>
-
+            {/* Password */}
             <div>
               <label className="block mb-2 font-medium">
                 Password
@@ -73,12 +63,26 @@ const SignUpPage=()=>{
 
               <input
                 type="password"
-                placeholder="Enter password"
+                placeholder="Create a password"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+              />
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block mb-2 font-medium">
+                Confirm Password
+              </label>
+
+              <input
+                type="password"
+                placeholder="Confirm your password"
                 className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
               />
             </div>
 
             <button
+              type="submit"
               className="w-full bg-[#E17100] text-white py-4 rounded-lg font-semibold hover:bg-orange-600 transition"
             >
               Create Account
@@ -89,7 +93,7 @@ const SignUpPage=()=>{
             Already have an account?{" "}
             <Link
               href="/signin"
-              className="text-[#E17100] font-semibold"
+              className="text-[#E17100] font-semibold hover:underline"
             >
               Sign In
             </Link>
@@ -98,5 +102,6 @@ const SignUpPage=()=>{
       </div>
     </section>
   );
-}
-export default SignUpPage
+};
+
+export default SignUpPage;

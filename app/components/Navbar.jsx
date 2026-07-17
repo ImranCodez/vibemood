@@ -46,7 +46,6 @@ const Navbar = () => {
            <Link href="/signup">signup</Link>
           </span>
         </div>
-      
       </div>
     </div>
   );

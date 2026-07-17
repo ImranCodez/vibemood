@@ -57,7 +57,7 @@ const FeaturedProducts=()=> {
           {products.map((product) => (
             <div
               key={product.id}
-              className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition duration-300 hover:-translate-y-2 hover:border-[#e17000] hover:shadow-xl"
+              className="group overflow-hidden rounded-2xl border shadow-lg border-gray-200 bg-white transition duration-300 hover:-translate-y-2 hover:border-[#e17000] hover:shadow-xl"
             >
               {/* Image */}
               <div className="relative overflow-hidden">

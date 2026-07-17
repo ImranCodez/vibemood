@@ -1,3 +1,5 @@
+
+import Button from "./ui/Button";
 export default function Footer() {
   const quickLinks = [
     "Home",
@@ -31,9 +33,10 @@ export default function Footer() {
               and affordable prices. Elevate your everyday look.
             </p>
 
-            <button className="mt-6 rounded-lg bg-[#e17000] px-6 py-3 font-medium text-white transition hover:bg-white hover:text-black">
+            {/* <button className="mt-6 rounded-lg bg-[#e17000] px-6 py-3 font-medium text-white transition hover:bg-white hover:text-black">
               Shop Now
-            </button>
+            </button> */}
+            <Button className="px-6 py-3">shop now</Button>
           </div>
 
           {/* Quick Links */}
@@ -93,11 +96,7 @@ export default function Footer() {
                 className="w-full rounded-lg border border-gray-700 bg-transparent px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-[#e17000]"
               />
 
-              <button
-                className="w-full rounded-lg bg-[#e17000] py-3 font-semibold text-white transition hover:bg-white hover:text-black"
-              >
-                Subscribe
-              </button>
+             <Button className="py-3 w-full">Subscribe</Button>
             </form>
           </div>
         </div>
