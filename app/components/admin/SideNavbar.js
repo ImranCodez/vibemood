@@ -20,7 +20,7 @@ const menus = [
   {
     name: "Products",
     icon: ShoppingBag,
-    href: "/admin/products",
+    href: "/admin/product",
   },
   {
     name: "Categories",
