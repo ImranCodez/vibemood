@@ -205,7 +205,7 @@ export default function ProductsPage() {
 
                   <td className="px-6 py-5">
                     <Link
-                      href={`/dashboard/products/update/${product.id}`}
+                      href={`/admin/product/${product.id}/update`}
                       className="inline-flex items-center gap-2 rounded-lg bg-[#E17100] px-4 py-2 text-sm font-medium text-white transition hover:bg-black"
                     >
                       <FaEdit />

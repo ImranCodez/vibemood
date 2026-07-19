@@ -4,7 +4,7 @@ import StatCard from "@/app/components/admin/StartCart";
 
 export default function Dashboard() {
   return (
-    <main className="flex-1 bg-gray-300 p-8">
+    <main className="flex-1 bg-orange-400 p-8">
       <Header />
 
       <div className="grid lg:grid-cols-4 gap-6 mt-8">
