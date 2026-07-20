@@ -133,7 +133,6 @@ export default function ProductsPage() {
             <option>Out of Stock</option>
             <option>Low Stock</option>
           </select>
-
           <select className="rounded-lg border px-4 py-3 text-gray-500  outline-none">
             <option>Newest</option>
             <option>Oldest</option>
@@ -142,7 +141,6 @@ export default function ProductsPage() {
           </select>
         </div>
       </div>
-
       {/* Table */}
 
       <div className="overflow-hidden rounded-xl bg-white shadow">
