@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useState } from "react";
 
 const SignUpPage = () => {
+const [userdata,setuserdata]=useState("ofifjdbdkjbdskjdkjb")
+console.log(userdata);
   return (
     <section className="min-h-screen flex">
       {/* Left Side */}

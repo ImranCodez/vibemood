@@ -69,7 +69,7 @@ export default function CreateProductPage() {
         <div className="flex justify-between items-center mb-8">
 
           <div>
-            <h1 className="text-3xl text-gray-500 font-bold">
+            <h1 className="text-3xl text-gray-700 font-bold">
               Create Product
             </h1>
 
@@ -92,7 +92,7 @@ export default function CreateProductPage() {
 
             <div className="bg-white rounded-xl p-6 shadow">
 
-              <h2 className="font-bold text-gray-500 text-xl mb-5">
+              <h2 className="font-bold text-gray-700 text-xl mb-5">
                 Product Information
               </h2>
 
@@ -100,7 +100,7 @@ export default function CreateProductPage() {
 
                 <div>
 
-                  <label className="font-medium text-gray-500">
+                  <label className="font-medium text-gray-700">
                     Product Title
                   </label>
 
@@ -113,7 +113,7 @@ export default function CreateProductPage() {
 
                 <div>
 
-                  <label className="font-medium text-gray-500">
+                  <label className="font-medium text-gray-700">
                     Description
                   </label>
 
@@ -129,7 +129,7 @@ export default function CreateProductPage() {
 
                   <div>
 
-                    <label className="text-gray-500">Category</label>
+                    <label className="text-gray-700">Category</label>
 
                     <select className="w-full border text-gray-500 rounded-lg p-3 mt-2">
 
@@ -145,7 +145,7 @@ export default function CreateProductPage() {
 
                   <div>
 
-                    <label className="text-gray-500">Status</label>
+                    <label className="text-gray-700">Status</label>
 
                     <select className="w-full text-gray-500 border rounded-lg p-3 mt-2">
 
@@ -163,7 +163,7 @@ export default function CreateProductPage() {
 
                   <div>
 
-                    <label className="text-gray-500">Price</label>
+                    <label className="text-gray-700">Price</label>
 
                     <input
                       type="number"
@@ -175,7 +175,7 @@ export default function CreateProductPage() {
 
                   <div>
 
-                    <label className="text-gray-500">Discount (%)</label>
+                    <label className="text-gray-700">Discount (%)</label>
 
                     <input
                       type="number"
@@ -298,7 +298,7 @@ export default function CreateProductPage() {
 
             <div className="bg-white rounded-xl shadow p-6">
 
-              <h2 className="font-bold text-xl mb-5 text-gray-500">
+              <h2 className="font-bold text-xl mb-5 text-gray-800">
                 Thumbnail
               </h2>
 
@@ -322,7 +322,7 @@ export default function CreateProductPage() {
 
             <div className="bg-white rounded-xl shadow p-6">
 
-              <h2 className="font-bold text-xl mb-5 text-gray-500">
+              <h2 className="font-bold text-xl mb-5 text-gray-800">
                 Gallery Images
               </h2>
 
@@ -355,7 +355,7 @@ export default function CreateProductPage() {
 
             <div className="bg-white rounded-xl shadow p-6">
 
-              <h2 className="font-bold text-xl mb-4 text-gray-500">
+              <h2 className="font-bold text-xl mb-4 text-gray-800">
                 Product Settings
               </h2>
 

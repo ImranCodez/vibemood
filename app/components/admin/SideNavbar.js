@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -11,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 
+import Link from "next/link";
 const menus = [
   {
     name: "Dashboard",
@@ -47,9 +47,9 @@ const menus = [
 export default function Sidebar() {
   return (
     <aside className="w-72 bg-[#1d1717] text-white min-h-screen p-6">
-      <h1 className="text-3xl font-bold mb-10">
+      <Link   href={"/"} className="text-3xl font-bold mb-10">
         Vibe<span className="text-[#E17000]">Mood</span>
-      </h1>
+      </Link>
 
       <div className="space-y-2">
         {menus.map((item) => (
