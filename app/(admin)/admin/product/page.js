@@ -75,7 +75,7 @@ export default function ProductsPage() {
         </div>
 
         <Link
-          href="/dashboard/products/add-product"
+          href="/admin/product/new"
           className="flex items-center gap-2 rounded-lg bg-[#E17100] px-5 py-3 font-medium text-white transition hover:bg-black"
         >
           <FaPlus />
