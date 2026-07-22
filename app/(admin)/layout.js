@@ -1,12 +1,12 @@
-import Sidebar from "@/app/components/admin/SideNavbar";
+"use client";
 
-export default async function AdminLayout({ children }) {
+import { ApiProvider } from "@reduxjs/toolkit/query/react";
+import { AdminApiService } from "./services/api";
+
+export default function Providers({ children }) {
   return (
-    <>
-      <div className="flex bg-gray-200">
-        <Sidebar />
-        {children}
-      </div>
-    </>
+    <ApiProvider api={AdminApiService}>
+      {children}
+    </ApiProvider>
   );
 }

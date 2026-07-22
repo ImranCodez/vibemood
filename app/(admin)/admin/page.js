@@ -1,5 +1,5 @@
+'use client'
 import Header from "@/app/components/admin/Header";
-import Sidebar from "@/app/components/admin/SideNavbar";
 import StatCard from "@/app/components/admin/StartCart";
 
 export default function Dashboard() {

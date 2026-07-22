@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaSearch, FaEdit } from "react-icons/fa";
+import { useGetproductsQuery } from "../../services/api";
 
 const products = [
   {
@@ -62,6 +63,9 @@ const products = [
 ];
 
 export default function ProductsPage() {
+  const { data } = useGetproductsQuery();
+  console.log(data?.data?.prodcuts);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       {/* Header */}
@@ -143,7 +147,7 @@ export default function ProductsPage() {
       </div>
       {/* Table */}
 
-      <div className="overflow-hidden rounded-xl bg-white shadow">
+      <div className="overflow-hidden rounded-xl bg-amber-300 shadow">
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-gray-50">
@@ -159,27 +163,40 @@ export default function ProductsPage() {
             </thead>
 
             <tbody>
-              {products.map((product) => (
+              {data?.data?.prodcuts?.map((product) => (
                 <tr
-                  key={product.id}
+                  key={product._id}
                   className="border-t transition hover:bg-gray-50"
                 >
                   <td className="px-6 py-5">
-                    {/* <div className="relative h-16 w-16 overflow-hidden rounded-lg">
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div> */}
+                    <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-lg">
+                        {/* ✅ FIX: Render Image only when image URL exists */}
+                        {product?.image ? (
+                          <Image
+                            src={product.image}
+                            alt={product.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          // ✅ FIX: Placeholder when no image is available
+                          <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xs text-gray-500">
+                            No Image
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </td>
 
                   <td className="px-6 py-5 font-semibold text-gray-500 ">
                     {product.title}
                   </td>
 
-                  <td className="px-6 py-5 text-gray-500 ">{product.category}</td>
+                  {/* ✅ FIX: Show category name instead of whole object */}
+                  <td className="px-6 py-5 text-gray-500">
+                    {product.category?.name}
+                  </td>
 
                   <td className="px-6 py-5 font-semibold text-gray-500 ">
                     ৳ {product.price}
@@ -193,8 +210,8 @@ export default function ProductsPage() {
                         product.status === "Active"
                           ? "bg-green-100 text-green-700"
                           : product.status === "Low Stock"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
                       }`}
                     >
                       {product.status}
@@ -203,7 +220,7 @@ export default function ProductsPage() {
 
                   <td className="px-6 py-5">
                     <Link
-                      href={`/admin/product/${product.id}/update`}
+                      href={`/admin/product/${product._id}/update`}
                       className="inline-flex items-center gap-2 rounded-lg bg-[#E17100] px-4 py-2 text-sm font-medium text-white transition hover:bg-black"
                     >
                       <FaEdit />
@@ -219,9 +236,7 @@ export default function ProductsPage() {
         {/* Footer */}
 
         <div className="flex flex-col items-center justify-between gap-4 border-t px-6 py-5 md:flex-row">
-          <p className="text-sm text-gray-500">
-            Showing 1–6 of 150 products
-          </p>
+          <p className="text-sm text-gray-500">Showing 1–6 of 150 products</p>
 
           <div className="flex gap-2">
             <button className="rounded-lg border px-4 py-2 hover:bg-gray-100">
