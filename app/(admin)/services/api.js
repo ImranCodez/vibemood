@@ -1,3 +1,4 @@
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const AdminApiService = createApi({
@@ -8,7 +9,10 @@ export const AdminApiService = createApi({
     getproducts: build.query({
       query: () => "/product/getproduct",
     }),
+    GetCategories: build.query({
+      query: () => "/category/getall",
+    }),
   }),
 });
 
-export const {useGetproductsQuery}= AdminApiService;
+export const {useGetproductsQuery,useGetCategoriesQuery}= AdminApiService;

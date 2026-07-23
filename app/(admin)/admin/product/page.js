@@ -5,66 +5,66 @@ import Link from "next/link";
 import { FaPlus, FaSearch, FaEdit } from "react-icons/fa";
 import { useGetproductsQuery } from "../../services/api";
 
-const products = [
-  {
-    id: 1,
-    title: "Premium Oversized Hoodie",
-    // image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
-    category: "Men",
-    price: 2990,
-    stock: 120,
-    status: "Active",
-  },
-  {
-    id: 2,
-    title: "Classic Black T-Shirt",
-    // image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400",
-    category: "Men",
-    price: 1290,
-    stock: 85,
-    status: "Active",
-  },
-  {
-    id: 3,
-    title: "Cargo Jogger Pant",
-    // image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400",
-    category: "Men",
-    price: 2490,
-    stock: 32,
-    status: "Active",
-  },
-  {
-    id: 4,
-    title: "Denim Jacket",
-    // image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
-    category: "Men",
-    price: 4490,
-    stock: 0,
-    status: "Out of Stock",
-  },
-  {
-    id: 5,
-    title: "Women's Sweatshirt",
-    // image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400",
-    category: "Women",
-    price: 2190,
-    stock: 45,
-    status: "Active",
-  },
-  {
-    id: 6,
-    title: "Summer Polo Shirt",
-    // image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400",
-    category: "Men",
-    price: 1790,
-    stock: 15,
-    status: "Low Stock",
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     title: "Premium Oversized Hoodie",
+//     // image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+//     category: "Men",
+//     price: 2990,
+//     stock: 120,
+//     status: "Active",
+//   },
+//   {
+//     id: 2,
+//     title: "Classic Black T-Shirt",
+//     // image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400",
+//     category: "Men",
+//     price: 1290,
+//     stock: 85,
+//     status: "Active",
+//   },
+//   {
+//     id: 3,
+//     title: "Cargo Jogger Pant",
+//     // image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400",
+//     category: "Men",
+//     price: 2490,
+//     stock: 32,
+//     status: "Active",
+//   },
+//   {
+//     id: 4,
+//     title: "Denim Jacket",
+//     // image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400",
+//     category: "Men",
+//     price: 4490,
+//     stock: 0,
+//     status: "Out of Stock",
+//   },
+//   {
+//     id: 5,
+//     title: "Women's Sweatshirt",
+//     // image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400",
+//     category: "Women",
+//     price: 2190,
+//     stock: 45,
+//     status: "Active",
+//   },
+//   {
+//     id: 6,
+//     title: "Summer Polo Shirt",
+//     // image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400",
+//     category: "Men",
+//     price: 1790,
+//     stock: 15,
+//     status: "Low Stock",
+//   },
+// ];
 
 export default function ProductsPage() {
   const { data } = useGetproductsQuery();
-  console.log(data?.data?.prodcuts);
+  console.log(data?.data.prodcuts[0].variants);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -83,7 +83,7 @@ export default function ProductsPage() {
           className="flex items-center gap-2 rounded-lg bg-[#E17100] px-5 py-3 font-medium text-white transition hover:bg-black"
         >
           <FaPlus />
-          Add Product
+          Create Product
         </Link>
       </div>
 
@@ -147,7 +147,7 @@ export default function ProductsPage() {
       </div>
       {/* Table */}
 
-      <div className="overflow-hidden rounded-xl bg-amber-300 shadow">
+      <div className="overflow-hidden rounded-xl bg-white shadow">
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead className="bg-gray-50">
@@ -172,19 +172,14 @@ export default function ProductsPage() {
                     <div className="relative h-16 w-16 overflow-hidden rounded-lg">
                       <div className="relative h-16 w-16 overflow-hidden rounded-lg">
                         {/* ✅ FIX: Render Image only when image URL exists */}
-                        {product?.image ? (
+                       
                           <Image
-                            src={product.image}
+                            src={product.thumbnail}
                             alt={product.title}
                             fill
                             className="object-cover"
                           />
-                        ) : (
-                          // ✅ FIX: Placeholder when no image is available
-                          <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xs text-gray-500">
-                            No Image
-                          </div>
-                        )}
+                
                       </div>
                     </div>
                   </td>
@@ -201,8 +196,11 @@ export default function ProductsPage() {
                   <td className="px-6 py-5 font-semibold text-gray-500 ">
                     ৳ {product.price}
                   </td>
-
-                  <td className="px-6 py-5 text-gray-500 ">{product.stock}</td>
+                    {
+                      data?.data.prodcuts[0].variants.map((items)=>(
+                        <td className="px-6 py-5 text-gray-500 ">{items.stock}</td>
+                      ))
+                    }
 
                   <td className="px-6 py-5">
                     <span
@@ -239,23 +237,23 @@ export default function ProductsPage() {
           <p className="text-sm text-gray-500">Showing 1–6 of 150 products</p>
 
           <div className="flex gap-2">
-            <button className="rounded-lg border px-4 py-2 hover:bg-gray-100">
+            <button className="rounded-lg border px-4 py-2 text-black hover:bg-gray-300">
               Previous
             </button>
 
-            <button className="rounded-lg bg-[#E17100] px-4 py-2 text-white">
+            <button className="rounded-lg bg-[#E17100] px-4 py-2 text-black">
               1
             </button>
 
-            <button className="rounded-lg border px-4 py-2 hover:bg-gray-100">
+            <button className="rounded-lg border px-4 py-2 text-black hover:bg-gray-300">
               2
             </button>
 
-            <button className="rounded-lg border px-4 py-2 hover:bg-gray-100">
+            <button className="rounded-lg border px-4 py-2 text-black hover:bg-gray-300">
               3
             </button>
 
-            <button className="rounded-lg border px-4 py-2 hover:bg-gray-100">
+            <button className="rounded-lg border px-4 py-2 text-black hover:bg-gray-300">
               Next
             </button>
           </div>

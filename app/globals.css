@@ -9,6 +9,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 }
+@utility container{
+  margin: auto;
+  padding: 0 12px;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {

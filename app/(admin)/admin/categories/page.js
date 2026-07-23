@@ -1,8 +1,9 @@
 "use client";
-
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { FaPlus, FaEdit, FaSearch } from "react-icons/fa";
+import { useGetCategoriesQuery } from "../../services/api";
 
 const sampleCategories = [
   {
@@ -49,6 +50,8 @@ export default function CategoriesPage() {
   const filtered = sampleCategories.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()),
   );
+  const { data } = useGetCategoriesQuery();
+  console.log(data?.data);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -111,19 +114,19 @@ export default function CategoriesPage() {
             </thead>
 
             <tbody>
-              {filtered.map((category) => (
+              {data?.data.map((category) => (
                 <tr
-                  key={category.id}
+                  key={category._id}
                   className="border-t hover:bg-gray-200 transition"
                 >
-                  <td className="px-6 py-4">
-                    {/* <Image
-                      src={category.image}
-                      width={60}
-                      height={60}
+                  <td>
+                    <Image
+                      src={category.thumbnail}
                       alt={category.name}
-                      className="rounded-lg object-cover h-16 w-16"
-                    /> */}
+                      width={70}
+                      height={70}
+                      className="rounded object-cover"
+                    />
                   </td>
 
                   <td className="px-6 py-4 font-semibold text-gray-500">
@@ -148,7 +151,7 @@ export default function CategoriesPage() {
                     </span>
                   </td>
 
-                  <td className="px-6 py-4 text-gray-500">
+                  <td className="px-6 py-4 text-gray-500 bg-amber-200">
                     {category.createdAt}
                   </td>
 

@@ -9,7 +9,7 @@ const Input = ({
   error,
   disabled = false,
   className = "",
-  min,
+  mini,
   max,
   props,
   multiple,
@@ -17,7 +17,7 @@ const Input = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block mb-1 text-sm font-medium text-gray-700">
+        <label className="block mb-1 text-sm font-medium text-[#000000]">
           {label}
         </label>
       )}
@@ -28,14 +28,14 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
-        min={min}
+        mini={mini}
         max={max}
-        multiple
-        className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 transition
+        multiple={multiple}
+        className={`w-full px-3 py-2 border text-[#000000] rounded-lg shadow-sm focus:outline-none focus:ring-2 transition
           ${
             error
               ? "border-red-500 focus:ring-red-400"
-              : "border-gray-300 focus:ring-blue-400"
+              : "border-gray-300 focus:ring-[#E17100]"
           }
           ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
           ${className}
