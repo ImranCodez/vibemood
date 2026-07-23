@@ -32,10 +32,10 @@ export default function CreateProductPage() {
 
   const [variants, setVariants] = useState([
     {
-      color: "Black",
-      size: "M",
-      sku: "BLK-M",
-      stock: 25,
+      color: "",
+      sizes: "",
+      sku: "",
+      stock: "",
     },
   ]);
 
@@ -44,7 +44,7 @@ export default function CreateProductPage() {
       ...variants,
       {
         color: "",
-        size: "",
+        sizes: "",
         sku: "",
         stock: "",
       },
@@ -196,34 +196,13 @@ export default function CreateProductPage() {
                     <tbody>
                       {variants.map((item, index) => (
                         <tr key={index} className="border-b text-gray-500">
-                          <td className="p-3">
-                            <input
-                              defaultValue={item.color}
-                              className="border rounded text-gray-500 p-2 w-full"
-                            />
-                          </td>
-
-                          <td className="p-3">
-                            <input
-                              defaultValue={item.size}
-                              className="border rounded text-gray-500 p-2 w-full"
-                            />
-                          </td>
-
-                          <td className="p-3">
-                            <input
-                              defaultValue={item.sku}
-                              className="border rounded text-gray-500 p-2 w-full"
-                            />
-                          </td>
-
-                          <td className="p-3">
-                            <input
-                              defaultValue={item.stock}
-                              className="border rounded text-gray-500 p-2 w-full"
-                            />
-                          </td>
-
+                          <div className="flex">
+                            <div className="flex gap-4">
+                              <Input label={"sizes"} defaultValue={item.sizes} />
+                              <Input defaultValue={item.color} />
+                              <Input defaultValue={item.sku} />
+                              <Input defaultValue={item.stock} />
+                            </div>
                           <td className="p-3 text-center">
                             <button
                               onClick={() => removeVariant(index)}
@@ -232,6 +211,8 @@ export default function CreateProductPage() {
                               <FaTimes />
                             </button>
                           </td>
+                          </div>
+
                         </tr>
                       ))}
                     </tbody>
