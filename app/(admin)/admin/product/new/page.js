@@ -167,52 +167,29 @@ export default function CreateProductPage() {
                   <h2 className="font-bold text-xl text-gray-700">
                     Product Variants
                   </h2>
-
-                  <button
-                    onClick={addVariant}
-                    className="bg-[#E17100] text-white px-4 py-2 rounded-lg flex items-center gap-2"
-                  >
-                    <FaPlus />
-                    Add Variant
-                  </button>
+              <Button onClick={addVariant}> <FaPlus/> Add Variant</Button>
                 </div>
-
                 <div className="overflow-auto">
                   <table className="w-full">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="p-3 text-gray-600">Color</th>
-
-                        <th className="p-3 text-gray-600">Size</th>
-
-                        <th className="p-3 text-gray-600">SKU</th>
-
-                        <th className="p-3 text-gray-600">Stock</th>
-
-                        <th className="p-3 text-gray-600">Action</th>
-                      </tr>
-                    </thead>
-
                     <tbody>
                       {variants.map((item, index) => (
-                        <tr key={index} className="border-b text-gray-500">
+                        <tr key={index} className="border-b text-gray-800">
                           <div className="flex">
                             <div className="flex gap-4">
-                              <Input label={"sizes"} defaultValue={item.sizes} />
-                              <Input defaultValue={item.color} />
-                              <Input defaultValue={item.sku} />
-                              <Input defaultValue={item.stock} />
+                              <Input className="px-3" label={"sizes"}  />
+                              <Input label={"color"} />
+                              <Input label={"sku"} />
+                              <Input label={"Stock"} />
                             </div>
                           <td className="p-3 text-center">
                             <button
                               onClick={() => removeVariant(index)}
-                              className="text-red-500"
+                              className=" p-4 border rounded-[7px] text-red-700 hover:bg-red-500 hover:text-amber-50"
                             >
                               <FaTimes />
                             </button>
                           </td>
                           </div>
-
                         </tr>
                       ))}
                     </tbody>
@@ -257,11 +234,11 @@ export default function CreateProductPage() {
                   alt="thumbnail"
                   className="rounded-lg"
                 />
-
-                <button className="mt-5 border-2 border-dashed border-[#E17100] text-[#E17100] rounded-lg w-full py-4 flex justify-center items-center gap-2">
-                  <FaCloudUploadAlt />
+               <Button className=" rounded-lg w-full py-4 flex justify-center items-center gap-2">
+                <FaCloudUploadAlt />
                   Upload Thumbnail
-                </button>
+               </Button>
+                
               </div>
 
               <div className="bg-white rounded-xl shadow p-6">
@@ -283,21 +260,18 @@ export default function CreateProductPage() {
 
                   ))} */}
                 </div>
-
-                <button className="mt-5 border-2 border-dashed border-[#E17100] text-[#E17100] rounded-lg w-full py-4 flex justify-center items-center gap-2">
-                  <FaCloudUploadAlt />
-                  Upload Images
-                </button>
+                        <Button className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2">
+                <FaCloudUploadAlt />
+                  Upload Thumbnail
+               </Button>
               </div>
 
               <div className="bg-white rounded-xl shadow p-6">
                 <h2 className="font-bold text-xl mb-4 text-gray-800">
                   Product Settings
                 </h2>
-
                 <label className="flex items-center justify-between">
                   <span className="text-gray-500"> Featured Product</span>
-
                   <input type="checkbox" />
                 </label>
               </div>
