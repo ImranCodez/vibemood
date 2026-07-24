@@ -8,7 +8,7 @@ import Button from "@/app/components/ui/Button";
 export default function CreateProductPage() {
   const categories = ["Men", "Women", "Kids", "Accessories"];
 
-  const [product, setProduct] = useState({
+  const [newproduct, setProduct] = useState({
     title: "",
     description: "",
     slug: "",
@@ -19,6 +19,7 @@ export default function CreateProductPage() {
     variants: "",
     isActive: "",
   });
+  console.log(newproduct);
 
   //   const [thumbnail] = useState(
   //     "https://placehold.co/400x400/png"
@@ -32,29 +33,39 @@ export default function CreateProductPage() {
 
   const [variants, setVariants] = useState([
     {
+      id: Date.now(),
       color: "",
       sizes: "",
-      sku: "",
+      sku: `NM-${Math.floor(Math.random() * 100000)}`,
       stock: "",
     },
   ]);
+  console.log(variants);
 
   const addVariant = () => {
     setVariants([
       ...variants,
       {
+        id: Date.now(),
         color: "",
         sizes: "",
-        sku: "",
+        sku: `NM-${Math.floor(Math.random() * 100000)}`,
         stock: "",
       },
     ]);
   };
+  const handelInputVariant=(id,field,value)=>(console.log(id,field,value))
 
   const removeVariant = (index) => {
     setVariants(variants.filter((_, i) => i !== index));
   };
-
+  // const handelCancleVariant = (id) => {
+  //     if (variants.length > 1) {
+  //       const updatedVariantList = variants.filter((vitem) => vitem.id !== id);
+  //       setVariants(updatedVariantList);
+  //       setNewProduct((prev) => ({ ...prev, variants: updatedVariantList }));
+  //     }
+  //   };
   return (
     <section className="bg-gray-100 min-h-screen p-8 pb-24">
       <form>
@@ -91,22 +102,45 @@ export default function CreateProductPage() {
 
                 <div className="space-y-5">
                   <Input
+                    value={newproduct.title}
+                    onChange={(e) =>
+                      setProduct((prev) => ({ ...prev, title: e.target.value }))
+                    }
                     className="text-black"
                     placeholder={"Enter your product title"}
                     label={"Product Title"}
                   />
                   <Input
+                    value={newproduct.slug}
+                    onChange={(e) =>
+                      setProduct((prev) => ({ ...prev, slug: e.target.value }))
+                    }
                     className="text-black"
                     placeholder={"Enter your product slug"}
                     label={"slug"}
                   />
-
+                  <Input
+                    value={newproduct.tags}
+                    onChange={(e) =>
+                      setProduct((prev) => ({ ...prev, tags: e.target.value }))
+                    }
+                    className="text-black"
+                    placeholder={"Enter your product tags"}
+                    label={"tags (comma seperated)"}
+                  />
                   <div>
                     <label className="font-medium text-gray-700">
                       Description
                     </label>
 
                     <textarea
+                      value={newproduct.description}
+                      onChange={(e) =>
+                        setProduct((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
                       rows={6}
                       className="w-full border rounded-lg p-3 text-gray-500 mt-2 focus:border-[#E17100] outline-none"
                       placeholder="Write product description..."
@@ -141,6 +175,13 @@ export default function CreateProductPage() {
                     </div>
 
                     <Input
+                      value={newproduct.price}
+                      onChange={(e) =>
+                        setProduct((prev) => ({
+                          ...prev,
+                          price: e.target.value,
+                        }))
+                      }
                       mini={1}
                       label={"price"}
                       type="number"
@@ -148,6 +189,13 @@ export default function CreateProductPage() {
                     />
 
                     <Input
+                      value={newproduct.discountpercentage}
+                      onChange={(e) =>
+                        setProduct((prev) => ({
+                          ...prev,
+                          discountpercentage: e.target.value,
+                        }))
+                      }
                       type="number"
                       label={"discountpercentage"}
                       max={100}
@@ -167,32 +215,58 @@ export default function CreateProductPage() {
                   <h2 className="font-bold text-xl text-gray-700">
                     Product Variants
                   </h2>
-              <Button onClick={addVariant}> <FaPlus/> Add Variant</Button>
+                  <Button onClick={addVariant}>
+                    {" "}
+                    <FaPlus /> Add Variant
+                  </Button>
                 </div>
                 <div className="overflow-auto">
                   <table className="w-full">
-                    <tbody>
-                      {variants.map((item, index) => (
-                        <tr key={index} className="border-b text-gray-800">
-                          <div className="flex">
-                            <div className="flex gap-4">
-                              <Input className="px-3" label={"sizes"}  />
-                              <Input label={"color"} />
-                              <Input label={"sku"} />
-                              <Input label={"Stock"} />
-                            </div>
-                          <td className="p-3 text-center">
-                            <button
-                              onClick={() => removeVariant(index)}
-                              className=" p-4 border rounded-[7px] text-red-700 hover:bg-red-500 hover:text-amber-50"
-                            >
-                              <FaTimes />
-                            </button>
-                          </td>
-                          </div>
-                        </tr>
-                      ))}
-                    </tbody>
+                    {variants.map((item, index) => (
+                      <div key={item.id} className="flex">
+                        <div className="flex gap-4">
+                          {/* <Input
+                            className="p-2 bg-amber-300"
+                            value={variants.sizes}
+                            onChange={(e) =>
+                              setVariants((prev) => ({
+                                ...prev,
+                                sizes: e.target.value,
+                              }))
+                            }  
+                            label={"sizes"}
+                          /> */}
+                          <select
+                            value={variants.sizes}
+                            onChange={(e) =>
+                              handelInputVariant(variants.id,"sizes",e.target.value,)
+                            }
+                            className="rounded-lg border text-black px-2 py-2 text-sm col-span-3"
+                          >
+                            {["s", "m", "l", "xl", "2xl", "3xl"].map((size) => (
+                              <option key={size} value={size}>
+                                {size.toUpperCase()}
+                              </option>
+                            ))}
+                          </select>
+
+                          <Input value={variants.color}
+                            onChange={(e) =>
+                              handelInputVariant(variants.id,"color",e.target.value,)
+                            } label={"color"} />
+                          <Input label={"sku"} />
+                          <Input label={"Stock"} />
+                        </div>
+                        {variants.length > 1 && (
+                          <button
+                            onClick={() => removeVariant(index)}
+                            className=" w-7 border rounded-[7px] text-red-700 hover:bg-red-500 hover:text-amber-50"
+                          >
+                            <FaTimes />
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </table>
                 </div>
               </div>
@@ -234,11 +308,10 @@ export default function CreateProductPage() {
                   alt="thumbnail"
                   className="rounded-lg"
                 />
-               <Button className=" rounded-lg w-full py-4 flex justify-center items-center gap-2">
-                <FaCloudUploadAlt />
+                <Button className=" rounded-lg w-full py-4 flex justify-center items-center gap-2">
+                  <FaCloudUploadAlt />
                   Upload Thumbnail
-               </Button>
-                
+                </Button>
               </div>
 
               <div className="bg-white rounded-xl shadow p-6">
@@ -260,10 +333,10 @@ export default function CreateProductPage() {
 
                   ))} */}
                 </div>
-                        <Button className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2">
-                <FaCloudUploadAlt />
+                <Button className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2">
+                  <FaCloudUploadAlt />
                   Upload Thumbnail
-               </Button>
+                </Button>
               </div>
 
               <div className="bg-white rounded-xl shadow p-6">
