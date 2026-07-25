@@ -54,12 +54,29 @@ export default function CreateProductPage() {
       },
     ]);
   };
-  const handelInputVariant=(id,field,value)=>(console.log(id,field,value))
+  const handelInputVariant = (id, field, value) => {
+  const variantsinputcahnge = variants.map((item) =>
+    item.id === id
+      ? { ...item, [field]: value }
+      : item
+  );
 
+  setVariants(variantsinputcahnge);
+};
+// variants.map((item) => {
+//   if (item.id === id) {
+//     return {
+//       ...item,
+//       [field]: value,
+//     };
+//   }
+
+//   return item;
+// });
   const removeVariant = (index) => {
     setVariants(variants.filter((_, i) => i !== index));
   };
-  // const handelCancleVariant = (id) => {
+// const handelCancleVariant = (id) => {
   //     if (variants.length > 1) {
   //       const updatedVariantList = variants.filter((vitem) => vitem.id !== id);
   //       setVariants(updatedVariantList);
@@ -227,19 +244,23 @@ export default function CreateProductPage() {
                         <div className="flex gap-4">
                           {/* <Input
                             className="p-2 bg-amber-300"
-                            value={variants.sizes}
+                            value={item.sizes}
                             onChange={(e) =>
                               setVariants((prev) => ({
                                 ...prev,
                                 sizes: e.target.value,
                               }))
-                            }  
+                            }
                             label={"sizes"}
                           /> */}
                           <select
-                            value={variants.sizes}
+                            value={item.sizes}
                             onChange={(e) =>
-                              handelInputVariant(variants.id,"sizes",e.target.value,)
+                              handelInputVariant(
+                                item.id,
+                                "sizes",
+                                e.target.value,
+                              )
                             }
                             className="rounded-lg border text-black px-2 py-2 text-sm col-span-3"
                           >
@@ -250,12 +271,35 @@ export default function CreateProductPage() {
                             ))}
                           </select>
 
-                          <Input value={variants.color}
+                          <Input
+                            value={item.color}
                             onChange={(e) =>
-                              handelInputVariant(variants.id,"color",e.target.value,)
-                            } label={"color"} />
-                          <Input label={"sku"} />
-                          <Input label={"Stock"} />
+                              handelInputVariant(
+                                item.id,
+                                "color",
+                                e.target.value,
+                              )
+                            }
+                            label={"color"}
+                          />
+                          <Input
+                            value={item.sizes}
+                            onChange={(e) =>
+                              handelInputVariant(item.id, "sku", e.target.value)
+                            }
+                            label={"sku"}
+                          />
+                          <Input
+                            value={item.sizes}
+                            onChange={(e) =>
+                              handelInputVariant(
+                                item.id,
+                                "Stock",
+                                e.target.value,
+                              )
+                            }
+                            label={"Stock"}
+                          />
                         </div>
                         {variants.length > 1 && (
                           <button
