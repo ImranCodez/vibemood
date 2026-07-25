@@ -17,6 +17,8 @@ export default function CreateProductPage() {
     discountpercentage: "",
     tags: "",
     variants: "",
+    thumbnail: null,
+    images: [],
     isActive: "",
   });
   console.log(newproduct);
@@ -55,28 +57,26 @@ export default function CreateProductPage() {
     ]);
   };
   const handelInputVariant = (id, field, value) => {
-  const variantsinputcahnge = variants.map((item) =>
-    item.id === id
-      ? { ...item, [field]: value }
-      : item
-  );
+    const variantsinputcahnge = variants.map((item) =>
+      item.id === id ? { ...item, [field]: value } : item,
+    );
 
-  setVariants(variantsinputcahnge);
-};
-// variants.map((item) => {
-//   if (item.id === id) {
-//     return {
-//       ...item,
-//       [field]: value,
-//     };
-//   }
+    setVariants(variantsinputcahnge);
+  };
+  // variants.map((item) => {
+  //   if (item.id === id) {
+  //     return {
+  //       ...item,
+  //       [field]: value,
+  //     };
+  //   }
 
-//   return item;
-// });
+  //   return item;
+  // });
   const removeVariant = (index) => {
     setVariants(variants.filter((_, i) => i !== index));
   };
-// const handelCancleVariant = (id) => {
+  // const handelCancleVariant = (id) => {
   //     if (variants.length > 1) {
   //       const updatedVariantList = variants.filter((vitem) => vitem.id !== id);
   //       setVariants(updatedVariantList);
@@ -111,7 +111,7 @@ export default function CreateProductPage() {
           <div className="flex lg:flex-cols-3 justify-between gap-8">
             {/* LEFT */}
 
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 bg-amber-300 space-y-4">
               <div className="bg-white rounded-xl p-6 shadow">
                 <h2 className="font-bold text-gray-700 text-xl mb-5">
                   Product Information
@@ -219,8 +219,27 @@ export default function CreateProductPage() {
                       mini={0}
                       placeholder={0}
                     />
-                    <Input type="file" label={"Upload thumbnail"} />
-                    <Input type="file" multiple label={"Upload images"} />
+                    <Input
+                      onChange={(e) => {
+                        setProduct((prev) => ({
+                          ...prev,
+                          thumbnail: e.target.files[0],
+                        }));
+                      }}
+                      type="file"
+                      label={"Upload thumbnail"}
+                    />
+                    <Input
+                      onChange={(e) => {
+                        setProduct((prev) => ({
+                          ...prev,
+                          images: e.target.files,
+                        }));
+                      }}
+                      type="file"
+                      multiple
+                      label={"Upload images"}
+                    />
                   </div>
                 </div>
               </div>
@@ -283,18 +302,18 @@ export default function CreateProductPage() {
                             label={"color"}
                           />
                           <Input
-                            value={item.sizes}
+                            value={item.sku}
                             onChange={(e) =>
                               handelInputVariant(item.id, "sku", e.target.value)
                             }
                             label={"sku"}
                           />
                           <Input
-                            value={item.sizes}
+                            value={item.stock}
                             onChange={(e) =>
                               handelInputVariant(
                                 item.id,
-                                "Stock",
+                                "stock",
                                 e.target.value,
                               )
                             }
@@ -332,10 +351,6 @@ export default function CreateProductPage() {
                 </Button>
               </div>
 
-              {/* RIGHT CARD: Thumbnail */}
-              <div className="space-y-6">
-                {/* আপনার Thumbnail কার্ডের ভেতরের সব কোড */}
-              </div>
             </div>
             {/* RIGHT */}
 
@@ -344,14 +359,15 @@ export default function CreateProductPage() {
                 <h2 className="font-bold text-xl mb-5 text-gray-800">
                   Thumbnail
                 </h2>
-
-                <Image
-                  src={""}
-                  width={400}
-                  height={400}
-                  alt="thumbnail"
-                  className="rounded-lg"
-                />
+                {newproduct.thumbnail && (
+                  <Image
+                    src={URL.createObjectURL(newproduct.thumbnail)}
+                    width={400}
+                    height={400}
+                    alt="thumbnail"
+                    className="rounded-lg"
+                  />
+                )}
                 <Button className=" rounded-lg w-full py-4 flex justify-center items-center gap-2">
                   <FaCloudUploadAlt />
                   Upload Thumbnail
@@ -364,18 +380,17 @@ export default function CreateProductPage() {
                 </h2>
 
                 <div className="grid grid-cols-2 gap-3">
-                  {/* {gallery?.map((img, index) => (
-
-                    <Image
-                      key={index}
-                      src={img}
-                      width={200}
-                      height={200}
-                      alt=""
-                      className="rounded-lg"
-                    />
-
-                  ))} */}
+                  {newproduct.images.length > 0 &&
+                    newproduct.images.map((img, index) => (
+                      <Image
+                        key={index}
+                        src={URL.createObjectURL(img)}
+                        width={200}
+                        height={200}
+                        alt="image"
+                        className="rounded-lg"
+                      />
+                    ))}
                 </div>
                 <Button className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2">
                   <FaCloudUploadAlt />
