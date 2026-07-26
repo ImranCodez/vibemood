@@ -21,20 +21,19 @@ export default function CreateProductPage() {
     images: [],
     isActive: "",
   });
-  console.log(newproduct.imge);
+  // .images set krea part ...//
   const handleimages = (e) => {
     const files = Array.from(e.target.files);
-
     setProduct((prev) => ({
       ...prev,
       images: [...prev.images, ...files],
     }));
-  };
+  // images remove part ...//
   const handlremoveimg =(index)=>{
       const img = newproduct.images.filter((item,i)=>(i!==index))
       setProduct((prev)=>({...prev,images:img}))
   }
-  console.log(newproduct);
+
 
   //   const [thumbnail] = useState(
   //     "https://placehold.co/400x400/png"
@@ -55,7 +54,6 @@ export default function CreateProductPage() {
       stock: "",
     },
   ]);
-  console.log(variants);
 
   const addVariant = () => {
     setVariants([
@@ -432,4 +430,5 @@ export default function CreateProductPage() {
       </form>
     </section>
   );
+}
 }
