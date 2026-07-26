@@ -5,7 +5,7 @@ const Button = ({
   onClick,
   type = "button",
   variant = "primary", // primary | secondary | outline | danger
-  size = "md", // sm | md | lg
+  size = "md"|"sm" | "md" | "lg",
   disabled = false,
   loading = false,
   className = "",
@@ -23,7 +23,7 @@ const Button = ({
   };
 
   const sizes = {
-    sm: "px-3 py-1.5 text-sm",
+    sm: "px-2 py-2 text-[12px]",
     md: "px-4 py-2 text-sm",
     lg: "px-10 py-3 text-base",
   };

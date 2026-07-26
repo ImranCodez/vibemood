@@ -21,6 +21,19 @@ export default function CreateProductPage() {
     images: [],
     isActive: "",
   });
+  console.log(newproduct.imge);
+  const handleimages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setProduct((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files],
+    }));
+  };
+  const handlremoveimg =(index)=>{
+      const img = newproduct.images.filter((item,i)=>(i!==index))
+      setProduct((prev)=>({...prev,images:img}))
+  }
   console.log(newproduct);
 
   //   const [thumbnail] = useState(
@@ -229,17 +242,14 @@ export default function CreateProductPage() {
                       type="file"
                       label={"Upload thumbnail"}
                     />
-                    <Input
-                      onChange={(e) => {
-                        setProduct((prev) => ({
-                          ...prev,
-                          images: e.target.files,
-                        }));
-                      }}
-                      type="file"
-                      multiple
-                      label={"Upload images"}
-                    />
+                    <div>
+                      <Input
+                        onChange={handleimages}
+                        type="file"
+                        multiple
+                        label={"Upload images"}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -257,7 +267,7 @@ export default function CreateProductPage() {
                   </Button>
                 </div>
                 <div className="overflow-auto">
-                  <table className="w-full">
+                  <table>
                     {variants.map((item, index) => (
                       <div key={item.id} className="flex">
                         <div className="flex gap-4">
@@ -281,7 +291,7 @@ export default function CreateProductPage() {
                                 e.target.value,
                               )
                             }
-                            className="rounded-lg border text-black px-2 py-2 text-sm col-span-3"
+                            className="  px-10  text-[#000000] focus:outline-none focus:ring-2 rounded-lg shadow-sm focus:ring-[#E17100] transition"
                           >
                             {["s", "m", "l", "xl", "2xl", "3xl"].map((size) => (
                               <option key={size} value={size}>
@@ -350,7 +360,6 @@ export default function CreateProductPage() {
                   Reset
                 </Button>
               </div>
-
             </div>
             {/* RIGHT */}
 
@@ -382,14 +391,24 @@ export default function CreateProductPage() {
                 <div className="grid grid-cols-2 gap-3">
                   {newproduct.images.length > 0 &&
                     newproduct.images.map((img, index) => (
-                      <Image
-                        key={index}
-                        src={URL.createObjectURL(img)}
-                        width={200}
-                        height={200}
-                        alt="image"
-                        className="rounded-lg"
-                      />
+                      <div key={index} className="relative w-fit">
+                        <Image
+                          src={URL.createObjectURL(img)}
+                          width={100}
+                          height={100}
+                          alt="image"
+                          className="rounded-lg"
+                        />
+
+                        <Button
+                        onClick={()=>handlremoveimg(index)}
+                          className="absolute top-[-20px] right-[-12px]"
+                          variant="danger"
+                          size={"sm"}
+                        >
+                          X
+                        </Button>
+                      </div>
                     ))}
                 </div>
                 <Button className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2">
