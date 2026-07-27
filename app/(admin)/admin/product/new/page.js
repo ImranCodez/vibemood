@@ -5,9 +5,10 @@ import Image from "next/image";
 import { FaCloudUploadAlt, FaPlus, FaTimes } from "react-icons/fa";
 import Input from "@/app/components/ui/input";
 import Button from "@/app/components/ui/Button";
+import { useGetCategoriesQuery } from "@/app/(admin)/services/api";
 export default function CreateProductPage() {
   const categories = ["Men", "Women", "Kids", "Accessories"];
-
+    const {data:categoryList}=useGetCategoriesQuery()
   const [newproduct, setProduct] = useState({
     title: "",
     description: "",
@@ -21,19 +22,22 @@ export default function CreateProductPage() {
     images: [],
     isActive: "",
   });
-  // .images set krea part ...//
+  console.log(newproduct.imge);
   const handleimages = (e) => {
     const files = Array.from(e.target.files);
+
     setProduct((prev) => ({
       ...prev,
       images: [...prev.images, ...files],
     }));
-  // images remove part ...//
+  };
   const handlremoveimg =(index)=>{
       const img = newproduct.images.filter((item,i)=>(i!==index))
       setProduct((prev)=>({...prev,images:img}))
+    
+     
   }
-
+  console.log(newproduct);
 
   //   const [thumbnail] = useState(
   //     "https://placehold.co/400x400/png"
@@ -54,6 +58,7 @@ export default function CreateProductPage() {
       stock: "",
     },
   ]);
+  console.log(variants);
 
   const addVariant = () => {
     setVariants([
@@ -73,6 +78,7 @@ export default function CreateProductPage() {
     );
 
     setVariants(variantsinputcahnge);
+    setProduct((prev)=>({...prev,variants:variantsinputcahnge}))
   };
   // variants.map((item) => {
   //   if (item.id === id) {
@@ -85,7 +91,9 @@ export default function CreateProductPage() {
   //   return item;
   // });
   const removeVariant = (index) => {
-    setVariants(variants.filter((_, i) => i !== index));
+    const updatevarints=variants.filter((_, i) => i !== index)
+    setVariants(updatevarints);
+      setProduct((prev)=>({...prev,variants:updatevarints}))
   };
   // const handelCancleVariant = (id) => {
   //     if (variants.length > 1) {
@@ -122,7 +130,7 @@ export default function CreateProductPage() {
           <div className="flex lg:flex-cols-3 justify-between gap-8">
             {/* LEFT */}
 
-            <div className="lg:col-span-2 bg-amber-300 space-y-4">
+            <div className="lg:col-span-2 bg-white space-y-4">
               <div className="bg-white rounded-xl p-6 shadow">
                 <h2 className="font-bold text-gray-700 text-xl mb-5">
                   Product Information
@@ -184,9 +192,9 @@ export default function CreateProductPage() {
                           Select Category
                         </option>
 
-                        {categories.map((item) => (
-                          <option className="text-gray-500" key={item}>
-                            {item}
+                        {categoryList?.data?.map((item) => (
+                          <option className="text-gray-500 capitalize" key={item._id} value={item._id}>
+                            {item.name}
                           </option>
                         ))}
                       </select>
@@ -430,5 +438,4 @@ export default function CreateProductPage() {
       </form>
     </section>
   );
-}
 }
