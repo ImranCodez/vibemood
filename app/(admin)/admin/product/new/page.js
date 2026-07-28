@@ -187,9 +187,9 @@ export default function CreateProductPage() {
                     <div>
                       <label className="text-gray-700">Category</label>
 
-                      <select className="w-full border text-gray-500 rounded-lg p-3 mt-2">
+                      <select onChange={(e)=>setProduct((prev)=>({...prev,category:e.target.value}))} className="w-full border text-gray-500 rounded-lg p-3 mt-2">
                         <option className="text-gray-500">
-                          Select Category
+                          Select Category-
                         </option>
 
                         {categoryList?.data?.map((item) => (
