@@ -1,4 +1,3 @@
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const AdminApiService = createApi({
@@ -12,7 +11,19 @@ export const AdminApiService = createApi({
     GetCategories: build.query({
       query: () => "/category/getall",
     }),
+    createNewproduct: build.mutation({
+      query: (productdata) => ({
+        url: "/product/create",
+        method: "POST",
+        headers: { "Content-type": "multipart/form-data" },
+        body: productdata,
+      }),
+    }),
   }),
 });
 
-export const {useGetproductsQuery,useGetCategoriesQuery}= AdminApiService;
+export const {
+  useGetproductsQuery,
+  useGetCategoriesQuery,
+  useCreateNewproductMutation,
+} = AdminApiService;

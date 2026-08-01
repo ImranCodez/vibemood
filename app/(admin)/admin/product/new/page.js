@@ -5,10 +5,10 @@ import Image from "next/image";
 import { FaCloudUploadAlt, FaPlus, FaTimes } from "react-icons/fa";
 import Input from "@/app/components/ui/input";
 import Button from "@/app/components/ui/Button";
-import { useGetCategoriesQuery } from "@/app/(admin)/services/api";
+import { useCreateNewproductMutation, useGetCategoriesQuery } from "@/app/(admin)/services/api";
 export default function CreateProductPage() {
-  const categories = ["Men", "Women", "Kids", "Accessories"];
     const {data:categoryList}=useGetCategoriesQuery()
+    const [createNewproduct]=useCreateNewproductMutation()
   const [newproduct, setProduct] = useState({
     title: "",
     description: "",
@@ -102,9 +102,16 @@ export default function CreateProductPage() {
   //       setNewProduct((prev) => ({ ...prev, variants: updatedVariantList }));
   //     }
   //   };
+
+  const handleuploadnewproduct=async(e)=>{
+    e.preventDefualt()
+    const res= await createNewproduct(newproduct)
+    console.log(res);
+    
+  }
   return (
     <section className="bg-gray-100 min-h-screen p-8 pb-24">
-      <form>
+      <form onSubmit={handleuploadnewproduct}>
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -118,12 +125,20 @@ export default function CreateProductPage() {
             </div>
             <div className="flex gap-2">
               <Button
-                type="button"
+              
+                type="submit"
                 className="bg-[#E17100] text-white px-6 py-3  rounded-lg hover:bg-orange-600"
               >
                 {" "}
                 Save Product
               </Button>
+               <Button
+                  variant="danger"
+                  className="w-20 text-[17px] shadow-xl"
+                  type="reset"
+                >
+                  Reset
+                </Button>
             </div>
           </div>
 
@@ -267,7 +282,7 @@ export default function CreateProductPage() {
                   <h2 className="font-bold text-xl text-gray-700">
                     Product Variants
                   </h2>
-                  <Button onClick={addVariant}>
+                  <Button size={"md"} onClick={addVariant}>
                     {" "}
                     <FaPlus /> Add Variant
                   </Button>
@@ -350,23 +365,7 @@ export default function CreateProductPage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_auto_1fr] gap-6 relative items-start">
-              {/* LEFT CARD: Inputs and others */}
-              <div className="space-y-6">
-                {/* আপনার Product Information কার্ডের ভেতরের সব কোড */}
-              </div>
-
-              {/* MIDDLE: Sticky/Fixed Reset button */}
-              <div className="fixed top-1/2 -translate-y-1/2 mr-2.5 z-50 flex flex-col items-center self-center py-5">
-                <Button
-                  variant="danger"
-                  className="w-20 text-[17px] shadow-xl"
-                  type="reset"
-                >
-                  Reset
-                </Button>
-              </div>
-            </div>
+          
             {/* RIGHT */}
 
             <div className="space-y-6">
