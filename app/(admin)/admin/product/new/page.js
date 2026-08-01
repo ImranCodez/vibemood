@@ -6,6 +6,7 @@ import { FaCloudUploadAlt, FaPlus, FaTimes } from "react-icons/fa";
 import Input from "@/app/components/ui/input";
 import Button from "@/app/components/ui/Button";
 import { useCreateNewproductMutation, useGetCategoriesQuery } from "@/app/(admin)/services/api";
+import { generateSlug } from "@/app/components/utils/sluggenerater";
 export default function CreateProductPage() {
     const {data:categoryList}=useGetCategoriesQuery()
     const [createNewproduct]=useCreateNewproductMutation()
@@ -154,9 +155,10 @@ export default function CreateProductPage() {
                 <div className="space-y-5">
                   <Input
                     value={newproduct.title}
-                    onChange={(e) =>
+                     onChange={(e) =>{
                       setProduct((prev) => ({ ...prev, title: e.target.value }))
-                    }
+                      setProduct((prev) => ({ ...prev, slug: generateSlug(e.target.value)}))
+                    }}
                     className="text-black"
                     placeholder={"Enter your product title"}
                     label={"Product Title"}
@@ -288,7 +290,7 @@ export default function CreateProductPage() {
                   </Button>
                 </div>
                 <div className="overflow-auto">
-                  <table>
+              
                     {variants.map((item, index) => (
                       <div key={item.id} className="flex">
                         <div className="flex gap-4">
@@ -361,7 +363,6 @@ export default function CreateProductPage() {
                         )}
                       </div>
                     ))}
-                  </table>
                 </div>
               </div>
             </div>
