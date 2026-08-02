@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const AdminApiService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000",
+    credentials:"include"
   }),
   endpoints: (build) => ({
     getproducts: build.query({

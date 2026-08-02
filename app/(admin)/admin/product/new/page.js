@@ -23,7 +23,7 @@ export default function CreateProductPage() {
     images: [],
     isActive: "",
   });
-  console.log(newproduct.imge);
+  
   const handleimages = (e) => {
     const files = Array.from(e.target.files);
 
@@ -38,8 +38,6 @@ export default function CreateProductPage() {
     
      
   }
-  console.log(newproduct);
-
   //   const [thumbnail] = useState(
   //     "https://placehold.co/400x400/png"
   //   );
@@ -59,7 +57,6 @@ export default function CreateProductPage() {
       stock: "",
     },
   ]);
-  console.log(variants);
 
   const addVariant = () => {
     setVariants([
