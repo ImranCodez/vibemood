@@ -287,7 +287,6 @@ const updateroduct = async (req, res) => {
     let allimges = imgurl.concat(FilterImage);
     if (imgurl.length > 0) productdata.images = allimges;
     productdata.svae();
-    // .......productnimg clouddiner update part .......//
   } catch (error) {
     sendResponse(res, 500, "Internal server error");
   }
