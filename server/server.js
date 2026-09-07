@@ -22,6 +22,11 @@ clodinaryConfig();
 app.use(route);
 // const dns = require('node:dns/promises');
 // dns.setServers(["1.1.1.1", "8.8.8.8"]);
-app.listen(8000, () => {
-  console.log("server is runing");
-});
+// ════════════════════ Server Listener ════════════════════
+if (process.env.NODE_ENV !== "production") {
+  app.listen(8000, () => {
+    console.log("Server Is Running");
+  });
+}
+
+module.exports = app;
