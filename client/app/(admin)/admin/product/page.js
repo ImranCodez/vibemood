@@ -64,23 +64,26 @@ import { useGetproductsQuery } from "../../services/api";
 
 export default function ProductsPage() {
   const { data } = useGetproductsQuery();
-  console.log(data?.data.prodcuts[0].variants);
-
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       {/* Header */}
 
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Products</h1>
-          <p className="mt-1 text-gray-500">
+          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+            Catalog control
+          </p>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
+            Products
+          </h1>
+          <p className="mt-1 text-[#77746f]">
             Manage all products in your store.
           </p>
         </div>
 
         <Link
           href="/admin/product/new"
-          className="flex items-center gap-2 rounded-lg bg-[#E17100] px-5 py-3 font-medium text-white transition hover:bg-black"
+          className="flex items-center gap-2 bg-[#ef6c2f] px-5 py-3 font-extrabold text-white transition hover:bg-[#151515]"
         >
           <FaPlus />
           Create Product
@@ -90,22 +93,22 @@ export default function ProductsPage() {
       {/* Stats */}
 
       <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-4">
-        <div className="rounded-xl bg-white p-6 shadow">
+        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
           <h4 className="text-gray-500">Total Products</h4>
           <p className="mt-2 text-3xl text-gray-700 font-bold">150</p>
         </div>
 
-        <div className="rounded-xl bg-white p-6 shadow">
+        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
           <h4 className="text-gray-500">Active</h4>
           <p className="mt-2 text-3xl font-bold text-green-600">128</p>
         </div>
 
-        <div className="rounded-xl bg-white p-6 shadow">
+        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
           <h4 className="text-gray-500">Out of Stock</h4>
           <p className="mt-2 text-3xl font-bold text-red-600">12</p>
         </div>
 
-        <div className="rounded-xl bg-white p-6 shadow">
+        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
           <h4 className="text-gray-500">Categories</h4>
           <p className="mt-2 text-3xl font-bold text-gray-500 ">8</p>
         </div>
@@ -113,14 +116,14 @@ export default function ProductsPage() {
 
       {/* Search & Filters */}
 
-      <div className="mb-6 flex flex-col gap-4 rounded-xl bg-white p-5 shadow lg:flex-row lg:items-center lg:justify-between">
+      <div className="mb-6 flex flex-col gap-4 border border-[#e5e2dc] bg-white p-5 shadow-[0_8px_24px_rgba(21,21,21,0.04)] lg:flex-row lg:items-center lg:justify-between">
         <div className="relative w-full lg:w-96">
           <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
 
           <input
             type="text"
             placeholder="Search products..."
-            className="w-full rounded-lg border py-3 pl-11 pr-4 outline-none text-gray-500   focus:border-[#E17100]"
+            className="w-full border border-[#e5e2dc] py-3 pl-11 pr-4 outline-none text-gray-500 focus:border-[#ef6c2f]"
           />
         </div>
 
@@ -147,10 +150,10 @@ export default function ProductsPage() {
       </div>
       {/* Table */}
 
-      <div className="overflow-hidden rounded-xl bg-white shadow">
+      <div className="overflow-hidden border border-[#e5e2dc] bg-white shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
         <div className="overflow-x-auto">
           <table className="min-w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#f7f6f2]">
               <tr className="text-left">
                 <th className="px-6 py-4 text-gray-500 ">Image</th>
                 <th className="px-6 py-4 text-gray-500 ">Product</th>
@@ -195,9 +198,12 @@ export default function ProductsPage() {
                   <td className="px-6 py-5 font-semibold text-gray-500 ">
                     ৳ {product.price}
                   </td>
-                  {data?.data.prodcuts[0].variants.map((items) => (
-                    <td className="px-6 py-5 text-gray-500 ">{items.stock}</td>
-                  ))}
+                  <td className="px-6 py-5 text-gray-500">
+                    {product.variants?.reduce(
+                      (total, variant) => total + (variant.stock || 0),
+                      0,
+                    ) || 0}
+                  </td>
 
                   <td className="px-6 py-5">
                     <span

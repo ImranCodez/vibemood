@@ -54,12 +54,17 @@ export default function CategoriesPage() {
   console.log(data?.data);
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       {/* Header */}
 
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-5 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Categories</h1>
+          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+            Catalog control
+          </p>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
+            Categories
+          </h1>
 
           <p className="text-gray-500 mt-1">
             Manage your VibeMood product categories.
@@ -67,7 +72,7 @@ export default function CategoriesPage() {
         </div>
         <Link
           href="/admin/categories/new"
-          className="bg-[#E17100] hover:bg-orange-600 text-white px-5 py-3 rounded-lg flex items-center gap-2 transition"
+          className="flex items-center gap-2 bg-[#ef6c2f] px-5 py-3 font-extrabold text-white transition hover:bg-[#151515]"
         >
           <FaPlus />
           Add Category
@@ -76,7 +81,7 @@ export default function CategoriesPage() {
 
       {/* Search */}
 
-      <div className="bg-white rounded-xl shadow p-5 mb-6">
+      <div className="mb-6 border border-[#e5e2dc] bg-white p-5 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
         <div className="relative max-w-md">
           <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
 
@@ -85,17 +90,17 @@ export default function CategoriesPage() {
             placeholder="Search category..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border rounded-lg py-3 pl-11 pr-4 outline-none focus:border-[#E17100]"
+            className="w-full border border-[#e5e2dc] py-3 pl-11 pr-4 outline-none focus:border-[#ef6c2f]"
           />
         </div>
       </div>
 
       {/* Table */}
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="overflow-hidden border border-[#e5e2dc] bg-white shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#f7f6f2]">
               <tr className="text-left text-gray-600">
                 <th className="px-6 py-4 ">Image</th>
 
@@ -157,7 +162,7 @@ export default function CategoriesPage() {
 
                   <td className="px-6 py-4">
                     <div className="flex justify-center">
-                      <button className="flex items-center gap-2 bg-[#E17100] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition">
+                      <button className="flex items-center gap-2 bg-[#ef6c2f] px-4 py-2 font-bold text-white transition hover:bg-[#151515]">
                         <FaEdit />
                         Update
                       </button>
@@ -182,7 +187,7 @@ export default function CategoriesPage() {
             Previous
           </button>
 
-          <button className="bg-[#E17100] text-white px-4 py-2 rounded-lg">
+          <button className="bg-[#ef6c2f] px-4 py-2 font-bold text-white">
             1
           </button>
 

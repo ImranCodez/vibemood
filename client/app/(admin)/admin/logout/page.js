@@ -3,8 +3,8 @@ import { LogOut } from "lucide-react";
 
 export default function LogoutPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background p-4">
-      <section className="w-full max-w-md rounded-xl border border-border bg-surface p-8 text-center shadow-sm">
+    <main className="flex min-h-screen items-center justify-center bg-[#f7f6f2] p-4">
+      <section className="w-full max-w-md border border-[#e5e2dc] bg-white p-8 text-center shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gray-soft text-slate">
           <LogOut size={24} />
         </div>

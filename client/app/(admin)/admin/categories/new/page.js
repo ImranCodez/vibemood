@@ -25,13 +25,16 @@ export default function CreateCategoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
 
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-600">
+            <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+              Catalog control
+            </p>
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
               Create Category
             </h1>
 
@@ -40,7 +43,7 @@ export default function CreateCategoryPage() {
             </p>
           </div>
 
-          <button className="bg-[#E17100] hover:bg-orange-600 text-gray-500 px-6 py-3 rounded-lg font-medium transition">
+          <button className="bg-[#ef6c2f] px-6 py-3 font-extrabold text-white transition hover:bg-[#151515]">
             Save Category
           </button>
         </div>
@@ -49,7 +52,7 @@ export default function CreateCategoryPage() {
           {/* Left */}
 
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
               <h2 className="text-xl font-semibold mb-6 text-gray-500">
                 Category Information
               </h2>
@@ -108,7 +111,7 @@ export default function CreateCategoryPage() {
           <div className="space-y-6">
             {/* Image */}
 
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
               <h2 className="text-xl font-semibold mb-5 text-gray-500">
                 Category Image
               </h2>
@@ -122,7 +125,7 @@ export default function CreateCategoryPage() {
                 className="rounded-lg w-full"
               /> */}
 
-              <button className="w-full mt-5 border-2 border-dashed border-[#E17100] rounded-lg py-4 text-[#E17100] flex items-center justify-center gap-2 hover:bg-orange-50 transition">
+              <button className="mt-5 flex w-full items-center justify-center gap-2 border-2 border-dashed border-[#ef6c2f] py-4 text-[#ef6c2f] transition hover:bg-[#fff0e9]">
                 <FaCloudUploadAlt />
                 Upload Image
               </button>
@@ -130,7 +133,7 @@ export default function CreateCategoryPage() {
 
             {/* Settings */}
 
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
               <h2 className="text-xl font-semibold text-gray-500 mb-5">
                 Settings
               </h2>

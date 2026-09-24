@@ -33,18 +33,20 @@ const users = [
 
 export default function UsersPage() {
   return (
-    <main className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray">
+          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
             People
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-slate">Users</h1>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate">
+            Users
+          </h1>
           <p className="mt-1 text-gray">
             View customers and manage account access.
           </p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate px-4 py-3 text-sm font-semibold text-text-light hover:bg-slate-light">
+        <button className="inline-flex items-center justify-center gap-2 bg-[#151515] px-4 py-3 text-sm font-bold text-white hover:bg-[#ef6c2f]">
           <UserPlus size={17} /> Add user
         </button>
       </div>
@@ -76,7 +78,7 @@ export default function UsersPage() {
           </label>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[680px] text-left text-sm">
+          <table className="w-full min-w-170 text-left text-sm">
             <thead className="bg-background text-gray">
               <tr>
                 <th className="px-6 py-4 font-medium">User</th>

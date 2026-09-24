@@ -21,12 +21,12 @@ const settings = [
 
 export default function SettingsPage() {
   return (
-    <main className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-widest text-gray">
+        <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
           Workspace
         </p>
-        <h1 className="mt-2 flex items-center gap-3 text-3xl font-bold text-slate">
+        <h1 className="mt-2 flex items-center gap-3 text-3xl font-extrabold tracking-tight text-slate">
           <Settings size={28} /> Settings
         </h1>
         <p className="mt-1 text-gray">Manage your VibeMood admin workspace.</p>
@@ -34,11 +34,11 @@ export default function SettingsPage() {
       <section className="mt-8 grid gap-4 lg:grid-cols-3">
         {settings.map(({ title, description, icon: Icon }) => (
           <button
-            className="group rounded-xl border border-border bg-surface p-6 text-left transition hover:border-slate hover:shadow-sm"
+            className="group border border-[#e5e2dc] bg-white p-6 text-left transition hover:border-[#ef6c2f] hover:shadow-[0_8px_24px_rgba(21,21,21,0.06)]"
             key={title}
           >
             <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-soft text-slate">
-              <Icon size={21} />
+              <Icon size={21} className="text-[#ef6c2f]" />
             </span>
             <h2 className="mt-5 text-lg font-bold text-slate">{title}</h2>
             <p className="mt-2 text-sm leading-6 text-gray">{description}</p>

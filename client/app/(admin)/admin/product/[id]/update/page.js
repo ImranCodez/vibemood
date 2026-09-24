@@ -38,18 +38,20 @@ export default function UpdateProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <button className="flex items-center gap-2 text-gray-600 hover:text-[#E17100]">
+            <button className="flex items-center gap-2 text-gray-600 hover:text-[#ef6c2f]">
               <FaArrowLeft />
               Back
             </button>
 
-            <h1 className="text-3xl font-bold mt-2">Update Product</h1>
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
+              Update Product
+            </h1>
 
             <p className="text-gray-500">
               Edit product information and save changes.
@@ -58,7 +60,7 @@ export default function UpdateProductPage() {
 
           <button
             onClick={handleSubmit}
-            className="bg-[#E17100] hover:bg-[#ca6500] text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            className="flex items-center gap-2 bg-[#ef6c2f] px-6 py-3 font-extrabold text-white transition hover:bg-[#151515]"
           >
             <FaSave />
             Update Product
@@ -68,7 +70,7 @@ export default function UpdateProductPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left */}
 
-          <div className="lg:col-span-2 bg-white rounded-xl shadow p-6">
+          <div className="lg:col-span-2 border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
             <h2 className="text-xl font-semibold mb-6">Product Information</h2>
 
             <form className="space-y-5">
@@ -171,7 +173,7 @@ export default function UpdateProductPage() {
           <div className="space-y-6">
             {/* Thumbnail */}
 
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
               <h2 className="font-semibold mb-4">Thumbnail</h2>
 
               <img
@@ -180,7 +182,7 @@ export default function UpdateProductPage() {
                 className="rounded-lg h-72 object-cover w-full"
               />
 
-              <button className="mt-5 border border-dashed border-[#E17100] text-[#E17100] rounded-lg w-full py-3 flex justify-center items-center gap-2 hover:bg-orange-50">
+              <button className="mt-5 flex w-full items-center justify-center gap-2 border border-dashed border-[#ef6c2f] py-3 text-[#ef6c2f] hover:bg-[#fff0e9]">
                 <FaCloudUploadAlt />
                 Change Thumbnail
               </button>
@@ -188,7 +190,7 @@ export default function UpdateProductPage() {
 
             {/* Gallery */}
 
-            <div className="bg-white rounded-xl shadow p-6">
+            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
               <h2 className="font-semibold mb-4">Product Images</h2>
 
               {/* <div className="grid grid-cols-3 gap-3">
@@ -204,7 +206,7 @@ export default function UpdateProductPage() {
 
               </div> */}
 
-              <button className="mt-5 border border-dashed border-[#E17100] text-[#E17100] rounded-lg w-full py-3 flex justify-center items-center gap-2 hover:bg-orange-50">
+              <button className="mt-5 flex w-full items-center justify-center gap-2 border border-dashed border-[#ef6c2f] py-3 text-[#ef6c2f] hover:bg-[#fff0e9]">
                 <FaCloudUploadAlt />
                 Upload More Images
               </button>
@@ -221,7 +223,7 @@ export default function UpdateProductPage() {
 
           <button
             onClick={handleSubmit}
-            className="bg-[#E17100] hover:bg-[#ca6500] text-white px-8 py-3 rounded-lg flex items-center gap-2"
+            className="flex items-center gap-2 bg-[#ef6c2f] px-8 py-3 font-extrabold text-white hover:bg-[#151515]"
           >
             <FaSave />
             Update Product

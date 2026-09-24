@@ -32,26 +32,28 @@ const orders = [
 ];
 
 const statusStyle = {
-  Delivered: "bg-slate text-white",
-  Processing: "bg-gray-soft text-slate",
+  Delivered: "bg-[#ef6c2f] text-white",
+  Processing: "bg-[#fff0e9] text-[#ef6c2f]",
   Pending: "bg-gray-soft text-gray",
-  Cancelled: "bg-slate-dark text-white",
+  Cancelled: "bg-[#151515] text-white",
 };
 
 export default function OrdersPage() {
   return (
-    <main className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-widest text-gray">
+          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
             Sales
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-slate">Orders</h1>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate">
+            Orders
+          </h1>
           <p className="mt-1 text-gray">
             Track and manage every customer order.
           </p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate px-4 py-3 text-sm font-semibold text-text-light hover:bg-slate-light">
+        <button className="inline-flex items-center justify-center gap-2 bg-[#151515] px-4 py-3 text-sm font-bold text-white hover:bg-[#ef6c2f]">
           <Download size={17} /> Export orders
         </button>
       </div>
@@ -66,7 +68,7 @@ export default function OrdersPage() {
           const [label, value] = item.split("|");
           return (
             <div
-              className="rounded-xl border border-border bg-surface p-5"
+              className="border border-[#e5e2dc] bg-white p-5 shadow-[0_8px_24px_rgba(21,21,21,0.04)]"
               key={label}
             >
               <p className="text-sm text-gray">{label}</p>
@@ -76,7 +78,7 @@ export default function OrdersPage() {
         })}
       </div>
 
-      <section className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
+      <section className="mt-6 overflow-hidden border border-[#e5e2dc] bg-white shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
         <div className="flex flex-col gap-4 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <h2 className="flex items-center gap-2 text-lg font-bold text-slate">
             <Boxes size={20} /> Recent orders

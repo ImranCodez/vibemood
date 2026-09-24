@@ -54,7 +54,7 @@ export default function Sidebar() {
     <>
       <button
         type="button"
-        className="fixed right-4 top-4 z-50 rounded-lg bg-[#1d1717] px-3 py-2 text-sm font-semibold text-white shadow-lg lg:hidden"
+        className="fixed right-4 top-4 z-50 border border-[#e5e2dc] bg-white px-3 py-2 text-sm font-extrabold text-[#151515] shadow-[0_8px_24px_rgba(21,21,21,0.08)] lg:hidden"
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
         aria-label="Toggle admin navigation"
@@ -70,14 +70,14 @@ export default function Sidebar() {
         />
       )}
       <aside
-        className={`${open ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-40 w-[min(18rem,85vw)] bg-[#1d1717] p-5 text-white shadow-xl transition-transform lg:static lg:w-64 lg:translate-x-0 lg:p-6 lg:shadow-none`}
+        className={`${open ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-40 w-[min(18rem,85vw)] border-r border-[#e5e2dc] bg-white p-5 text-[#151515] shadow-[8px_0_30px_rgba(21,21,21,0.06)] transition-transform lg:static lg:w-64 lg:translate-x-0 lg:p-6 lg:shadow-none`}
       >
         <Link
           href="/"
-          className="mb-10 block text-3xl font-bold"
+          className="mb-10 block text-3xl font-extrabold tracking-tight"
           onClick={() => setOpen(false)}
         >
-          Vibe<span className="text-[#E17000]">Mood</span>
+          Vibe<span className="text-[#ef6c2f]">Mood</span>
         </Link>
 
         <nav className="space-y-2" aria-label="Admin navigation">
@@ -86,7 +86,7 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition ${pathname === item.href ? "bg-[#E17000] text-white" : "text-white/70 hover:bg-[#E17000] hover:text-white"}`}
+              className={`flex items-center gap-3 px-4 py-3 text-sm font-bold transition ${pathname === item.href ? "bg-[#ef6c2f] text-white" : "text-[#77746f] hover:bg-[#fff0e9] hover:text-[#151515]"}`}
             >
               <item.icon size={20} />
               {item.name}
@@ -96,7 +96,7 @@ export default function Sidebar() {
 
         <Link
           href="/admin/logout"
-          className="mt-20 flex items-center gap-3 text-sm font-medium text-gray-light transition hover:text-text-light"
+          className="mt-20 flex items-center gap-3 text-sm font-bold text-[#77746f] transition hover:text-[#ef6c2f]"
         >
           <LogOut size={20} />
           Logout

@@ -4,26 +4,28 @@ import StatCard from "@/app/components/admin/StartCart";
 
 export default function Dashboard() {
   return (
-    <main className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
       <Header />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Revenue" value="$18,420" color="text-[#E17000]" />
+        <StatCard title="Revenue" value="৳18,420" color="text-[#ef6c2f]" />
 
-        <StatCard title="Orders" value="520" color="text-blue-600" />
+        <StatCard title="Orders" value="520" color="text-[#151515]" />
 
-        <StatCard title="Customers" value="1,250" color="text-green-600" />
+        <StatCard title="Customers" value="1,250" color="text-[#151515]" />
 
-        <StatCard title="Products" value="83" color="text-red-600" />
+        <StatCard title="Products" value="83" color="text-[#151515]" />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <div className="flex min-h-80 items-center justify-center rounded-xl border border-border bg-surface text-xl font-bold text-gray lg:col-span-2">
+        <div className="flex min-h-80 items-center justify-center border border-[#e5e2dc] bg-white text-xl font-extrabold text-[#77746f] shadow-[0_8px_24px_rgba(21,21,21,0.04)] lg:col-span-2">
           Sales Chart
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-6">
-          <h2 className="mb-5 text-xl font-bold text-slate">Top Products</h2>
+        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+          <h2 className="mb-5 text-xl font-extrabold text-slate">
+            Top Products
+          </h2>
 
           <div className="space-y-4">
             <div className="flex justify-between border-b border-border pb-3 text-sm text-gray">
@@ -49,8 +51,10 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-xl border border-border bg-surface p-4 text-gray sm:p-6">
-        <h2 className="mb-5 text-xl font-bold text-slate">Recent Orders</h2>
+      <div className="mt-8 overflow-hidden border border-[#e5e2dc] bg-white p-4 text-gray sm:p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+        <h2 className="mb-5 text-xl font-extrabold text-slate">
+          Recent Orders
+        </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-155 text-sm">

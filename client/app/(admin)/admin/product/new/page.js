@@ -124,12 +124,15 @@ export default function CreateProductPage() {
     await createNewproduct(newproduct);
   };
   return (
-    <section className="min-h-screen bg-background p-4 pb-24 sm:p-6 lg:p-8">
+    <section className="min-h-screen bg-[#f7f6f2] p-4 pb-24 sm:p-6 lg:p-8">
       <form onSubmit={handleuploadnewproduct}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h1 className="text-3xl text-gray-700 font-bold">
+              <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+                Catalog control
+              </p>
+              <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
                 Create Product
               </h1>
 
@@ -141,7 +144,7 @@ export default function CreateProductPage() {
               <Button
                 type="submit"
                 loading={isCreating}
-                className="flex-1 rounded-lg bg-[#E17100] px-4 py-3 text-white hover:bg-orange-600 sm:flex-none sm:px-6"
+                className="flex-1 bg-[#ef6c2f] px-4 py-3 font-extrabold text-white hover:bg-[#151515] sm:flex-none sm:px-6"
               >
                 {" "}
                 Save Product
@@ -160,7 +163,7 @@ export default function CreateProductPage() {
             {/* LEFT */}
 
             <div className="min-w-0 flex-1 space-y-4 bg-white">
-              <div className="bg-white rounded-xl p-6 shadow">
+              <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
                 <h2 className="font-bold text-gray-700 text-xl mb-5">
                   Product Information
                 </h2>
@@ -328,7 +331,7 @@ export default function CreateProductPage() {
 
               {/* Variants */}
 
-              <div className="bg-white rounded-xl shadow p-6">
+              <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
                 <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
                   <h2 className="font-bold text-xl text-gray-700">
                     Product Variants
@@ -441,7 +444,7 @@ export default function CreateProductPage() {
                         <Button
                           type="button"
                           onClick={() => handlremoveimg(index)}
-                          className="absolute top-[-20px] right-[-12px]"
+                          className="absolute -top-5 -right-3"
                           variant="danger"
                           size={"sm"}
                         >
