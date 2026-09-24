@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
 const Banner = () => {
   const banners = [
     {
@@ -24,43 +27,45 @@ const Banner = () => {
       subtitle: "Designed For Confidence",
     },
   ];
-
+  // this is my banner git
   return (
-    <section>
+    <section className="bg-[#171717]">
       {banners.slice(0, 1).map((banner) => (
         <div key={banner.id}>
           <div
-            className="relative h-[460px] bg-cover bg-center sm:h-[560px] md:h-[650px]"
+            className="relative min-h-[530px] bg-cover bg-center sm:min-h-[600px]"
             style={{
               backgroundImage: `url(${banner.image})`,
             }}
           >
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/10" />
 
             {/* Content */}
             <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6">
-              <div className="max-w-2xl text-white">
-                <span className="text-[#E17100] uppercase tracking-[4px] font-semibold">
-                  Premium Clothing
+              <div className="max-w-xl text-white">
+                <span className="text-sm font-bold uppercase tracking-[0.28em] text-[#ff8a51]">
+                  The VibeMood edit · 2026
                 </span>
 
-                <h1 className="mt-4 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
-                  {banner.title}
+                <h1 className="mt-5 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
+                  Everyday pieces,{" "}
+                  <span className="text-[#ff8a51]">better.</span>
                 </h1>
 
-                <p className="mt-5 max-w-xl text-base text-gray-200 sm:text-lg">
-                  {banner.subtitle}
+                <p className="mt-6 max-w-md text-base leading-7 text-white/80 sm:text-lg">
+                  {banner.subtitle}. Easy silhouettes, thoughtful details, and a
+                  little more joy in your everyday rotation.
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
-                  <button className="rounded-lg bg-[#E17100] px-6 py-3 font-semibold transition hover:bg-orange-600 sm:px-8 sm:py-4">
+                  <Link
+                    href="/shop"
+                    className="inline-flex items-center gap-2 bg-[#ef6c2f] px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-black sm:px-8"
+                  >
                     Shop Now
-                  </button>
-
-                  <button className="rounded-lg border border-white px-6 py-3 font-semibold transition hover:bg-white hover:text-black sm:px-8 sm:py-4">
-                    Explore
-                  </button>
+                    <ArrowRight size={18} />
+                  </Link>
                 </div>
               </div>
             </div>

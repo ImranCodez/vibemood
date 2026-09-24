@@ -20,12 +20,12 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-50 w-full border-b border-border bg-surface/75 shadow-sm backdrop-blur-xl">
+      <header className="fixed left-0 top-0 z-50 w-full border-b border-border bg-[#f7f6f2]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:gap-6">
           <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-5">
-            <div className="shrink-0 text-2xl font-black text-slate sm:text-3xl">
+            <div className="shrink-0 text-2xl font-extrabold tracking-tight text-slate sm:text-3xl">
               <Link href="/">
-                Vibe<span className="text-[#E17100]">Mood</span>
+                Vibe<span className="text-[#ef6c2f]">Mood</span>
               </Link>
               <nav
                 className="hidden items-center gap-1 lg:flex"
@@ -33,7 +33,7 @@ const Navbar = () => {
               >
                 {navLinks.map((link) => (
                   <Link
-                    className={`rounded-lg px-3 py-2 text-sm hover:bg-gray-500 font-semibold transition ${isActive(link.href) ? "bg-slate-400 text-text-light" : "text-gray hover:bg-gray-soft hover:text-slate"}`}
+                    className={`px-3 py-2 text-sm font-bold transition ${isActive(link.href) ? "text-[#ef6c2f]" : "text-gray hover:text-slate"}`}
                     href={link.href}
                     key={link.label}
                   >
@@ -54,17 +54,17 @@ const Navbar = () => {
           </label>
           <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
             <Link
-              className="relative rounded-lg p-2.5 text-slate bg-gray-300 transition hover:bg-gray-500"
+              className="relative p-2.5 text-slate transition hover:text-[#ef6c2f]"
               href="/cart"
               aria-label="Shopping cart"
             >
               <ShoppingBag className="h-5 w-5" strokeWidth={2.2} />
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-slate px-1 text-[15px] font-bold text-[#E17100]">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#ef6c2f] px-1 text-[10px] font-bold text-white">
                 0
               </span>
             </Link>
             <Link
-              className="rounded-lg bg-slate-300 p-2.5  transition hover:bg-slate-500"
+              className="p-2.5 text-slate transition hover:text-[#ef6c2f]"
               href="/profile"
               aria-label="Your profile"
             >

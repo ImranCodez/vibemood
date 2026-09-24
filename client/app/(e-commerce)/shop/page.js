@@ -1,64 +1,83 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, ShoppingCart, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
+import { demoProducts, withProductDefaults } from "../../../lib/catalog";
 
 export default function ShopPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(demoProducts);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:8000/product/getproduct?limit=24")
       .then((response) => response.json())
-      .then((result) => setProducts(result.data?.prodcuts || []))
-      .catch(() => setProducts([]))
+      .then((result) => {
+        if (result.data?.prodcuts?.length)
+          setProducts(result.data.prodcuts.map(withProductDefaults));
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <main className="bg-background px-4 py-10 sm:px-6 lg:px-8">
+    <main className="bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-gray">
-              The collection
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#ef6c2f]">
+              VibeMood collection
             </p>
-            <h1 className="mt-2 text-4xl font-bold text-slate">
-              Shop all pieces
+            <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate">
+              All the good stuff
             </h1>
             <p className="mt-2 max-w-lg text-gray">
               Thoughtful essentials for your everyday rotation.
             </p>
           </div>
-          <button className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-surface px-4 py-3 text-sm font-semibold text-slate">
+          <button className="inline-flex items-center justify-center gap-2 border border-border bg-surface px-4 py-3 text-sm font-bold text-slate">
             <SlidersHorizontal size={17} /> Filters
           </button>
         </div>
         {loading && <p className="mt-8 text-gray">Loading the collection...</p>}
-        {!loading && products.length === 0 && <p className="mt-8 text-gray">No products are available right now.</p>}
+        {!loading && products.length === 0 && (
+          <p className="mt-8 text-gray">No products are available right now.</p>
+        )}
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <article
-              className="group overflow-hidden rounded-xl border border-border bg-surface"
+              className="group overflow-hidden bg-surface"
               key={product._id}
             >
-              <div className="aspect-[4/5] overflow-hidden bg-gray-soft">
-                <img
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  src={product.thumbnail}
-                  alt={product.title}
-                />
+              <div className="relative aspect-[0.84] overflow-hidden bg-gray-soft">
+                <Link
+                  href={`/productDetails/${product.slug}`}
+                  aria-label={`View ${product.title}`}
+                >
+                  <img
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    src={product.thumbnail}
+                    alt={product.title}
+                  />
+                </Link>
+                <Link
+                  href={`/productDetails/${product.slug}`}
+                  className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#ef6c2f] hover:text-white"
+                >
+                  <ShoppingCart size={14} /> + Cart
+                </Link>
               </div>
               <div className="p-5">
-                <p className="text-xs font-semibold uppercase tracking-widest text-gray">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#ef6c2f]">
                   {product.category?.name || "Collection"}
                 </p>
-                <h2 className="mt-2 text-lg font-bold text-slate">
+                <h2 className="mt-2 text-lg font-extrabold text-slate">
                   {product.title}
                 </h2>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="font-bold text-slate">${Number(product.price).toFixed(2)}</span>
+                  <span className="font-extrabold text-slate">
+                    ৳ {Number(product.price).toLocaleString()}
+                  </span>
                   <Link
                     className="inline-flex items-center gap-1 text-sm font-semibold text-slate hover:underline"
                     href={`/productDetails/${product.slug}`}
