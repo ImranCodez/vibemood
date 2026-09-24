@@ -1,108 +1,107 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { demoProducts, withProductDefaults } from "../../lib/catalog";
 
-const FeaturedProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const API_URL = "http://localhost:8000";
+
+function ProductCard({ product }) {
+  const price = product.price * (1 - (product.discountpercentage || 0) / 100);
+
+  return (
+    <article className="group min-w-0">
+      <div className="relative aspect-[0.84] overflow-hidden bg-[#eef1f6]">
+        <Link
+          href={`/productDetails/${product.slug}`}
+          aria-label={`View ${product.title}`}
+        >
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+        </Link>
+        {product.discountpercentage > 0 && (
+          <span className="absolute left-3 top-3 bg-[#7042df] px-2.5 py-1 text-[11px] font-extrabold text-white">
+            -{product.discountpercentage}%
+          </span>
+        )}
+        <Link
+          href={`/productDetails/${product.slug}`}
+          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-[#172033] shadow-[0_3px_10px_rgba(23,32,51,0.10)] transition hover:bg-[#7042df] hover:text-white"
+        >
+          <ShoppingCart size={14} /> + Cart
+        </Link>
+      </div>
+      <div className="pt-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7042df]">
+          {product.category?.name || "Collection"}
+        </p>
+        <Link href={`/productDetails/${product.slug}`}>
+          <h3 className="mt-1.5 truncate text-sm font-extrabold text-[#172033] hover:text-[#7042df] sm:text-base">
+            {product.title}
+          </h3>
+        </Link>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="text-sm font-extrabold sm:text-base">
+            ৳ {Math.round(price).toLocaleString()}
+          </span>
+          {product.discountpercentage > 0 && (
+            <span className="text-xs text-[#99958e] line-through">
+              ৳ {Number(product.price).toLocaleString()}
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function FeaturedProducts() {
+  const [products, setProducts] = useState(demoProducts);
 
   useEffect(() => {
     const controller = new AbortController();
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/products?limit=8", {
-          signal: controller.signal,
-        });
-
-        const data = await res.json();
-
-        setProducts(data.products);
-      } catch (error) {
-        if (error.name !== "AbortError") setProducts([]);
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    fetch(`${API_URL}/product/getproduct?limit=8`, {
+      signal: controller.signal,
+    })
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((result) => {
+        if (result.data?.prodcuts?.length) {
+          setProducts(result.data.prodcuts.map(withProductDefaults));
+        }
+      })
+      .catch(() => {});
     return () => controller.abort();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-20 text-center">
-        <h2 className="text-2xl font-semibold">Loading Products...</h2>
-      </section>
-    );
-  }
-
   return (
-    <section className="bg-white py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        {/* Heading */}
-        <div className="mb-12 text-center">
-          <span className="rounded-full bg-[#e17000]/10 px-4 py-1 text-sm font-semibold text-[#e17000]">
-            Featured Collection
-          </span>
-
-          <h2 className="mt-4 text-4xl font-bold text-black">
-            Trending Products
-          </h2>
-
-          <p className="mx-auto mt-3 max-w-2xl text-gray-500">
-            Discover our handpicked products crafted with premium quality and
-            modern style.
-          </p>
+    <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex items-end justify-between gap-4 border-b border-[#e5e2dc] pb-5">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#7042df]">
+              Just dropped
+            </p>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              The latest pieces
+            </h2>
+          </div>
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-1 text-sm font-bold hover:text-[#7042df]"
+          >
+            Shop all <ArrowRight size={16} />
+          </Link>
         </div>
-
-        {/* Products */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="group overflow-hidden rounded-2xl border shadow-lg border-gray-200 bg-white transition duration-300 hover:-translate-y-2 hover:border-[#e17000] hover:shadow-xl"
-            >
-              {/* Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={product.thumbnail}
-                  alt={product.title}
-                  className="h-80 w-full object-cover transition duration-500 group-hover:scale-110"
-                />
-
-                <span className="absolute left-4 top-4 rounded-full bg-[#e17000] px-3 py-1 text-xs font-semibold text-white">
-                  New
-                </span>
-              </div>
-
-              {/* Content */}
-              <div className="p-5">
-                <h3 className="text-lg font-semibold text-black">
-                  {product.title}
-                </h3>
-
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-2xl font-bold text-[#e17000]">
-                    ${product.price}
-                  </span>
-
-                  <button className="rounded-full border border-black px-4 py-2 text-sm font-semibold text-black transition hover:bg-black hover:text-white">
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-10 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+          {products.slice(0, 8).map((product) => (
+            <ProductCard key={product._id || product.slug} product={product} />
           ))}
-        </div>
-
-        {/* View All */}
-        <div className="mt-14 text-center">
-          <button className="rounded-lg bg-[#e17000] px-8 py-3 font-semibold text-white transition hover:bg-black">
-            View All Products
-          </button>
         </div>
       </div>
     </section>
   );
-};
-export default FeaturedProducts;
+}

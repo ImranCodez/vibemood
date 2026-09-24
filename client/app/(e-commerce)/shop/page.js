@@ -25,7 +25,7 @@ export default function ShopPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#ef6c2f]">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#7042df]">
               VibeMood collection
             </p>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate">
@@ -68,10 +68,10 @@ export default function ShopPage() {
                 </Link>
               </div>
               <div className="p-5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#ef6c2f]">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#7042df]">
                   {product.category?.name || "Collection"}
                 </p>
-                <h2 className="mt-2 text-lg font-extrabold text-slate">
+                <h2 className="mt-2 text-lg font-extrabold text-[#172033]">
                   {product.title}
                 </h2>
                 <div className="mt-4 flex items-center justify-between">

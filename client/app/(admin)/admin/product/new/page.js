@@ -121,7 +121,11 @@ export default function CreateProductPage() {
     }
 
     setFormError("");
-    await createNewproduct(newproduct);
+    await createNewproduct({
+      ...newproduct,
+      variants,
+      isActive: true,
+    });
   };
   return (
     <section className="min-h-screen bg-[#f7f6f2] p-4 pb-24 sm:p-6 lg:p-8">

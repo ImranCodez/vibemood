@@ -29,28 +29,28 @@ const Banner = () => {
   ];
   // this is my banner git
   return (
-    <section className="bg-[#171717]">
+    <section className="bg-[#172033]">
       {banners.slice(0, 1).map((banner) => (
         <div key={banner.id}>
           <div
-            className="relative min-h-[530px] bg-cover bg-center sm:min-h-[600px]"
+            className="relative min-h-132.5 bg-cover bg-center sm:min-h-150"
             style={{
               backgroundImage: `url(${banner.image})`,
             }}
           >
             {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/10" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/35 to-black/10" />
 
             {/* Content */}
             <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6">
               <div className="max-w-xl text-white">
-                <span className="text-sm font-bold uppercase tracking-[0.28em] text-[#ff8a51]">
+                <span className="text-sm font-bold uppercase tracking-[0.28em] text-[#c7b5ff]">
                   The VibeMood edit · 2026
                 </span>
 
                 <h1 className="mt-5 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
                   Everyday pieces,{" "}
-                  <span className="text-[#ff8a51]">better.</span>
+                  <span className="text-[#c7b5ff]">better.</span>
                 </h1>
 
                 <p className="mt-6 max-w-md text-base leading-7 text-white/80 sm:text-lg">
@@ -61,7 +61,7 @@ const Banner = () => {
                 <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
                   <Link
                     href="/shop"
-                    className="inline-flex items-center gap-2 bg-[#ef6c2f] px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-black sm:px-8"
+                    className="inline-flex items-center gap-2 bg-[#7042df] px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-[#172033] sm:px-8"
                   >
                     Shop Now
                     <ArrowRight size={18} />
