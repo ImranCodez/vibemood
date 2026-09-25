@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { demoProducts, withProductDefaults } from "../../lib/catalog";
+import { withProductDefaults } from "../../lib/catalog";
 
 const API_URL = "http://localhost:8000";
 
@@ -12,7 +12,7 @@ function ProductCard({ product }) {
 
   return (
     <article className="group min-w-0">
-      <div className="relative aspect-[0.84] overflow-hidden bg-[#eef1f6]">
+      <div className="relative aspect-[0.84] overflow-hidden bg-[#e8e5de]">
         <Link
           href={`/productDetails/${product.slug}`}
           aria-label={`View ${product.title}`}
@@ -24,23 +24,23 @@ function ProductCard({ product }) {
           />
         </Link>
         {product.discountpercentage > 0 && (
-          <span className="absolute left-3 top-3 bg-[#7042df] px-2.5 py-1 text-[11px] font-extrabold text-white">
+          <span className="absolute left-3 top-3 bg-[#e17000] px-2.5 py-1 text-[11px] font-extrabold text-white">
             -{product.discountpercentage}%
           </span>
         )}
         <Link
           href={`/productDetails/${product.slug}`}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-[#172033] shadow-[0_3px_10px_rgba(23,32,51,0.10)] transition hover:bg-[#7042df] hover:text-white"
+          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#e17000] hover:text-white"
         >
           <ShoppingCart size={14} /> + Cart
         </Link>
       </div>
       <div className="pt-4">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7042df]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#e17000]">
           {product.category?.name || "Collection"}
         </p>
         <Link href={`/productDetails/${product.slug}`}>
-          <h3 className="mt-1.5 truncate text-sm font-extrabold text-[#172033] hover:text-[#7042df] sm:text-base">
+          <h3 className="mt-1.5 truncate text-sm font-extrabold text-[#151515] hover:text-[#e17000] sm:text-base">
             {product.title}
           </h3>
         </Link>
@@ -60,7 +60,7 @@ function ProductCard({ product }) {
 }
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState(demoProducts);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -69,9 +69,7 @@ export default function FeaturedProducts() {
     })
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((result) => {
-        if (result.data?.prodcuts?.length) {
-          setProducts(result.data.prodcuts.map(withProductDefaults));
-        }
+        setProducts((result.data?.prodcuts || []).map(withProductDefaults));
       })
       .catch(() => {});
     return () => controller.abort();
@@ -82,7 +80,7 @@ export default function FeaturedProducts() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-end justify-between gap-4 border-b border-[#e5e2dc] pb-5">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#7042df]">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#e17000]">
               Just dropped
             </p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -91,7 +89,7 @@ export default function FeaturedProducts() {
           </div>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1 text-sm font-bold hover:text-[#7042df]"
+            className="inline-flex items-center gap-1 text-sm font-bold hover:text-[#e17000]"
           >
             Shop all <ArrowRight size={16} />
           </Link>
@@ -101,6 +99,11 @@ export default function FeaturedProducts() {
             <ProductCard key={product._id || product.slug} product={product} />
           ))}
         </div>
+        {products.length === 0 && (
+          <p className="py-12 text-center text-sm text-[#77746f]">
+            No products are available yet.
+          </p>
+        )}
       </div>
     </section>
   );

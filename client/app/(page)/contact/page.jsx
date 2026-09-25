@@ -6,7 +6,7 @@ const ContactPage = () => {
       {/* Hero */}
       <section className="bg-black text-white py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <span className="text-[#E17100] uppercase tracking-widest font-semibold">
+          <span className="text-[#e17000] uppercase tracking-widest font-semibold">
             Contact Us
           </span>
 
@@ -26,26 +26,36 @@ const ContactPage = () => {
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div>
-            <h2 className="text-4xl font-bold text-[#000000c7] mb-8">Get In Touch</h2>
+            <h2 className="text-4xl font-bold text-[#000000c7] mb-8">
+              Get In Touch
+            </h2>
 
             <div className="space-y-6">
-              <div className="border-l-4 border-[#E17100] pl-4">
-                <h3 className="font-semibold text-[#000000c7] text-lg">Email</h3>
+              <div className="border-l-4 border-[#e17000] pl-4">
+                <h3 className="font-semibold text-[#000000c7] text-lg">
+                  Email
+                </h3>
                 <p className="text-gray-600">imranhossaianratul@gmail.com</p>
               </div>
 
-              <div className="border-l-4 border-[#E17100] pl-4">
-                <h3 className="font-semibold text-[#000000c7] text-lg">Phone</h3>
+              <div className="border-l-4 border-[#e17000] pl-4">
+                <h3 className="font-semibold text-[#000000c7] text-lg">
+                  Phone
+                </h3>
                 <p className="text-gray-600">+8801 60813 1058</p>
               </div>
 
-              <div className="border-l-4 border-[#E17100] pl-4">
-                <h3 className="font-semibold text-lg text-[#000000c7]">Address</h3>
+              <div className="border-l-4 border-[#e17000] pl-4">
+                <h3 className="font-semibold text-lg text-[#000000c7]">
+                  Address
+                </h3>
                 <p className="text-gray-600">Dhaka, Bangladesh</p>
               </div>
 
-              <div className="border-l-4 border-[#E17100] pl-4">
-                <h3 className="font-semibold text-lg text-[#000000c7]">Business Hours</h3>
+              <div className="border-l-4 border-[#e17000] pl-4">
+                <h3 className="font-semibold text-lg text-[#000000c7]">
+                  Business Hours
+                </h3>
                 <p className="text-gray-600">Mon - Sat : 9:00 AM - 8:00 PM</p>
               </div>
             </div>
@@ -53,7 +63,9 @@ const ContactPage = () => {
 
           {/* Form */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg">
-            <h2 className="text-3xl font-bold mb-6 text-[#000000c7]">Send A Message</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#000000c7]">
+              Send A Message
+            </h2>
 
             <form className="space-y-5">
               <input
@@ -82,7 +94,7 @@ const ContactPage = () => {
 
               <button
                 type="submit"
-                className="bg-[#E17100]  hover:bg-orange-600 transition text-white font-semibold px-8 py-4 rounded-lg w-full"
+                className="bg-[#e17000] hover:bg-[#151515] transition text-white font-semibold px-8 py-4 rounded-lg w-full"
               >
                 Send Message
               </button>

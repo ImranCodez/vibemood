@@ -1,20 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #f7f8fb;
+  --color-background: #f7f6f2;
   --color-surface: #ffffff;
-  --color-text: #172033;
-  --color-slate: #172033;
-  --color-slate-light: #46516a;
-  --color-gray: #687184;
-  --color-gray-soft: #f0f2f7;
-  --color-border: #e8ebf2;
-  --color-accent: #7042df;
-  --color-accent-soft: #eee8ff;
-  --color-chip-blue: #e6f0ff;
-  --color-chip-blue-text: #2160b2;
-  --color-chip-pink: #ffe5e5;
-  --color-chip-pink-text: #c74747;
+  --color-text: #151515;
+  --color-slate: #151515;
+  --color-slate-light: #4b4b4b;
+  --color-gray: #77746f;
+  --color-gray-soft: #efeee9;
+  --color-border: #e5e2dc;
+  --color-accent: #e17000;
+  --color-accent-soft: #fff3e6;
 }
 
 * {
@@ -81,4 +77,13 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--color-slate-light);
   outline-offset: 2px;
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

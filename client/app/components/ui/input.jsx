@@ -35,7 +35,7 @@ const Input = ({
           ${
             error
               ? "border-red-500 focus:ring-red-400"
-              : "border-gray-300 focus:ring-[#E17100]"
+              : "border-[#e5e2dc] focus:ring-[#e17000]"
           }
           ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
           ${className}

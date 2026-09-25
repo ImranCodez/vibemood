@@ -20,7 +20,7 @@ const SignUpPage = () => {
       {/* Right Side */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <p className="text-[#E17100] font-semibold uppercase tracking-widest">
+          <p className="text-[#e17000] font-semibold uppercase tracking-widest">
             Create Account
           </p>
 
@@ -34,7 +34,7 @@ const SignUpPage = () => {
               <input
                 type="text"
                 placeholder="Enter your full name"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
@@ -45,7 +45,7 @@ const SignUpPage = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
@@ -56,7 +56,7 @@ const SignUpPage = () => {
               <input
                 type="password"
                 placeholder="Create a password"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
@@ -67,13 +67,13 @@ const SignUpPage = () => {
               <input
                 type="password"
                 placeholder="Confirm your password"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#E17100] text-white py-4 rounded-lg font-semibold hover:bg-orange-600 transition"
+              className="w-full bg-[#e17000] text-white py-4 rounded-lg font-semibold hover:bg-[#151515] transition"
             >
               Create Account
             </button>
@@ -83,7 +83,7 @@ const SignUpPage = () => {
             Already have an account?{" "}
             <Link
               href="/signin"
-              className="text-[#E17100] font-semibold hover:underline"
+              className="text-[#e17000] font-semibold hover:underline"
             >
               Sign In
             </Link>

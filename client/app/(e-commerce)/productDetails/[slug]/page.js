@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Check, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { demoProducts, withProductDefaults } from "../../../../lib/catalog";
 
 const API_URL = "http://localhost:8000";
 
@@ -41,14 +40,8 @@ export default function ProductDetailsPage() {
         setProduct(loadedProduct);
         setStatus("ready");
       } catch (error) {
-        const demoProduct = demoProducts.find((item) => item.slug === slug);
-        if (demoProduct) {
-          setProduct(withProductDefaults(demoProduct));
-          setStatus("ready");
-        } else {
-          setMessage(error.message);
-          setStatus("error");
-        }
+        setMessage(error.message);
+        setStatus("error");
       }
     };
 
@@ -109,7 +102,7 @@ export default function ProductDetailsPage() {
         <h1 className="text-2xl font-bold text-slate">Product unavailable</h1>
         <p className="mt-2 text-gray">{message}</p>
         <Link
-          className="mt-6 inline-flex items-center gap-2 font-semibold text-[#7042df]"
+          className="mt-6 inline-flex items-center gap-2 font-semibold text-[#ef6c2f]"
           href="/shop"
         >
           <ArrowLeft size={16} /> Back to shop
@@ -135,7 +128,7 @@ export default function ProductDetailsPage() {
                 <button
                   key={image}
                   type="button"
-                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-gray-soft sm:h-20 sm:w-20 ${selectedImage === index ? "border-[#7042df]" : "border-transparent"}`}
+                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-gray-soft sm:h-20 sm:w-20 ${selectedImage === index ? "border-[#ef6c2f]" : "border-transparent"}`}
                   onClick={() => setSelectedImage(index)}
                   aria-label={`View image ${index + 1}`}
                 >
@@ -157,7 +150,7 @@ export default function ProductDetailsPage() {
           </section>
 
           <section className="self-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-[#7042df]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#ef6c2f]">
               {product.category?.name || "VibeMood collection"}
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate sm:text-5xl">
@@ -172,7 +165,7 @@ export default function ProductDetailsPage() {
                   <span className="text-lg text-gray line-through">
                     ${Number(product.price).toFixed(2)}
                   </span>
-                  <span className="text-sm font-bold text-[#7042df]">
+                  <span className="text-sm font-bold text-[#ef6c2f]">
                     {product.discountpercentage}% off
                   </span>
                 </>
@@ -198,7 +191,7 @@ export default function ProductDetailsPage() {
                         setSelectedVariant(index);
                         setQuantity(1);
                       }}
-                      className={`rounded-lg border p-3 text-left text-sm ${selectedVariant === index ? "border-[#7042df] bg-[#eee8ff]" : "border-border"} disabled:cursor-not-allowed disabled:opacity-40`}
+                      className={`rounded-lg border p-3 text-left text-sm ${selectedVariant === index ? "border-[#ef6c2f] bg-[#fff0e9]" : "border-border"} disabled:cursor-not-allowed disabled:opacity-40`}
                     >
                       <span className="block font-semibold text-slate">
                         {item.color} / {item.sizes}
@@ -237,7 +230,7 @@ export default function ProductDetailsPage() {
                 </button>
               </div>
               <button
-                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#7042df] px-4 font-semibold text-white hover:bg-[#172033] disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
+                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#ef6c2f] px-4 font-semibold text-white hover:bg-[#151515] disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
                 type="button"
                 disabled={!variant || variant.stock < 1}
                 onClick={addToCart}
@@ -246,7 +239,7 @@ export default function ProductDetailsPage() {
               </button>
             </div>
             {message && (
-              <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#7042df]">
+              <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#ef6c2f]">
                 <Check size={16} /> {message}
               </p>
             )}

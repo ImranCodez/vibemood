@@ -34,7 +34,7 @@ const SignInPage = () => {
       {/* Right Side */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <p className="text-[#E17100] font-semibold uppercase tracking-widest">
+          <p className="text-[#e17000] font-semibold uppercase tracking-widest">
             Welcome Back
           </p>
 
@@ -54,7 +54,7 @@ const SignInPage = () => {
                   }))
                 }
                 placeholder="Enter your email"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
@@ -71,14 +71,14 @@ const SignInPage = () => {
                   }))
                 }
                 placeholder="Enter password"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#E17100]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#E17100] text-white py-4 rounded-lg font-semibold hover:bg-orange-600 transition"
+              className="w-full bg-[#e17000] text-white py-4 rounded-lg font-semibold hover:bg-[#151515] transition"
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </button>
@@ -92,7 +92,7 @@ const SignInPage = () => {
 
           <p className="text-center mt-6 text-gray-500">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#E17100] font-semibold">
+            <Link href="/signup" className="text-[#e17000] font-semibold">
               Sign Up
             </Link>
           </p>

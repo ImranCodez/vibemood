@@ -64,7 +64,7 @@ export default function CartPage() {
     <main className="min-h-[60vh] bg-background px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center gap-3">
-          <ShoppingBag className="text-[#7042df]" />
+          <ShoppingBag className="text-[#ef6c2f]" />
           <h1 className="text-3xl font-extrabold tracking-tight text-slate">
             Your cart
           </h1>
@@ -82,7 +82,7 @@ export default function CartPage() {
               Your saved products are connected to your account.
             </p>
             <Link
-              className="mt-6 inline-flex bg-[#7042df] px-5 py-3 text-sm font-bold text-white"
+              className="mt-6 inline-flex bg-[#ef6c2f] px-5 py-3 text-sm font-bold text-white"
               href="/signin"
             >
               Sign in
@@ -96,7 +96,7 @@ export default function CartPage() {
             </h2>
             <p className="mt-2 text-gray">{message}</p>
             <Link
-              className="mt-6 inline-flex items-center gap-2 font-bold text-[#7042df]"
+              className="mt-6 inline-flex items-center gap-2 font-bold text-[#ef6c2f]"
               href="/shop"
             >
               <ArrowLeft size={16} /> Continue shopping
@@ -112,7 +112,7 @@ export default function CartPage() {
               Browse the collection and add pieces you love.
             </p>
             <Link
-              className="mt-6 inline-flex items-center gap-2 bg-[#7042df] px-5 py-3 text-sm font-bold text-white"
+              className="mt-6 inline-flex items-center gap-2 bg-[#ef6c2f] px-5 py-3 text-sm font-bold text-white"
               href="/shop"
             >
               <ArrowLeft size={16} /> Continue shopping
@@ -133,7 +133,7 @@ export default function CartPage() {
                       {String(item.product?._id || item.product).slice(-6)}
                     </p>
                     <p className="mt-1 text-sm text-gray">SKU: {item.sku}</p>
-                    <p className="mt-2 font-bold text-[#7042df]">
+                    <p className="mt-2 font-bold text-[#ef6c2f]">
                       ৳ {Number(item.subtotal || 0).toLocaleString()}
                     </p>
                     <div className="mt-3 flex items-center gap-2">
@@ -170,7 +170,7 @@ export default function CartPage() {
                 <span>Total</span>
                 <span>৳ {total.toLocaleString()}</span>
               </div>
-              <button className="mt-6 w-full bg-[#7042df] px-5 py-3 font-extrabold text-white hover:bg-[#172033]">
+              <button className="mt-6 w-full bg-[#ef6c2f] px-5 py-3 font-extrabold text-white hover:bg-[#151515]">
                 Ready to checkout
               </button>
             </aside>
