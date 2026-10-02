@@ -13,7 +13,7 @@ const Button = ({
   const baseStyles =
     "inline-flex items-center cursor-pointer justify-center font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-offset-2";
   const variants = {
-    primary: "bg-[#e17000] text-white hover:bg-[#151515] focus:ring-[#e17000]",
+    primary: "bg-[#6C3FEA] text-white hover:bg-[#101827] focus:ring-[#6C3FEA]",
     secondary: "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-400",
     outline:
       "border border-gray-300 text-gray-700 hover:bg-gray-100 focus:ring-gray-400",

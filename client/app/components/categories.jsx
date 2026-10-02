@@ -1,42 +1,61 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useGetCategoriesQuery } from "@/lib/api/api";
 
 const Categories = () => {
-  const [categories, setCategories] = useState([]);
+  const { data: categoriesResponse } = useGetCategoriesQuery();
+  const categories = categoriesResponse?.data || [];
   const [activeCategory, setActiveCategory] = useState(0);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
   const touchStart = useRef(null);
+  const visibleCount = Math.min(3, categories.length);
+  const canLoop = categories.length > visibleCount;
+  const cloneCount = canLoop ? visibleCount : 0;
+  const slides = canLoop
+    ? [
+        ...categories.slice(-visibleCount),
+        ...categories,
+        ...categories.slice(0, visibleCount),
+      ]
+    : categories;
+
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("http://localhost:8000/category/getall", {
-      signal: controller.signal,
-    })
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((result) => setCategories(result.data || []))
-      .catch(() => setCategories([]));
-    return () => controller.abort();
-  }, []);
-  useEffect(() => {
-    if (categories.length < 2) return undefined;
+    if (!canLoop) return undefined;
     const timer = window.setInterval(() => {
-      setActiveCategory((current) => (current + 1) % categories.length);
+      setActiveCategory((current) => current + 1);
     }, 4000);
     return () => window.clearInterval(timer);
-  }, [categories.length]);
+  }, [canLoop]);
+
+  useEffect(() => {
+    if (!canLoop || (activeCategory >= 0 && activeCategory < categories.length))
+      return undefined;
+
+    const timer = window.setTimeout(() => {
+      setTransitionEnabled(false);
+      setActiveCategory((current) =>
+        current < 0 ? current + categories.length : current - categories.length,
+      );
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setTransitionEnabled(true));
+      });
+    }, 750);
+
+    return () => window.clearTimeout(timer);
+  }, [activeCategory, canLoop, categories.length]);
 
   const changeCategory = (direction) => {
-    setActiveCategory(
-      (current) =>
-        (current + direction + categories.length) % categories.length,
-    );
+    if (!canLoop) return;
+    setActiveCategory((current) => current + direction);
   };
 
   return (
-    <section className="bg-[#f7f6f2] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <section className="bg-[#F8F9FC] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#e17000]">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#6C3FEA]">
               Find your mood
             </p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -45,7 +64,7 @@ const Categories = () => {
           </div>
           <Link
             href="/shop"
-            className="hidden text-sm font-bold underline decoration-[#e17000] underline-offset-4 sm:block"
+            className="hidden text-sm font-bold underline decoration-[#6C3FEA] underline-offset-4 sm:block"
           >
             View all
           </Link>
@@ -53,6 +72,7 @@ const Categories = () => {
 
         <div
           className="overflow-hidden px-1 py-3"
+          style={{ containerType: "inline-size" }}
           onTouchStart={(event) => {
             touchStart.current = event.touches[0].clientX;
           }}
@@ -65,17 +85,19 @@ const Categories = () => {
           }}
         >
           <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${activeCategory * 100}%)` }}
+            className={`flex ${transitionEnabled ? "transition-transform duration-700 ease-linear" : ""}`}
+            style={{
+              transform: `translateX(calc(-${activeCategory + cloneCount} * (100cqi / 3)))`,
+            }}
           >
-            {categories.map((item) => (
+            {slides.map((item, index) => (
               <div
-                key={item.slug}
-                className="flex min-w-full justify-center px-2"
+                key={`${item.slug}-${index}`}
+                className="w-1/3 flex-none px-2"
               >
                 <Link
                   href={`/shop?category=${item.slug}`}
-                  className="group relative aspect-square w-[min(78vw,18rem)] overflow-hidden rounded-full bg-[#dedbd3] shadow-[0_12px_28px_rgba(21,21,21,0.10)] ring-4 ring-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_rgba(21,21,21,0.16)]"
+                  className="group relative mx-auto block aspect-square w-full max-w-72 overflow-hidden rounded-full bg-[#F1EDFF] shadow-[0_12px_28px_rgba(16,24,39,0.10)] ring-4 ring-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_rgba(16,24,39,0.16)]"
                 >
                   <img
                     src={item.thumbnail}
@@ -95,18 +117,24 @@ const Categories = () => {
             ))}
           </div>
         </div>
-        <div className="mt-6 flex justify-center gap-2">
-          {categories.map((item, index) => (
-            <button
-              key={item.slug}
-              type="button"
-              aria-label={`Show ${item.name}`}
-              aria-current={index === activeCategory}
-              onClick={() => setActiveCategory(index)}
-              className={`h-1.5 transition-all ${index === activeCategory ? "w-8 bg-[#e17000]" : "w-4 bg-[#c9c4bb] hover:bg-[#e17000]"}`}
-            />
-          ))}
-        </div>
+        {canLoop && (
+          <div className="mt-6 flex justify-center gap-2">
+            {categories.map((item, index) => (
+              <button
+                key={item.slug}
+                type="button"
+                aria-label={`Show ${item.name}`}
+                aria-current={
+                  index ===
+                  ((activeCategory % categories.length) + categories.length) %
+                    categories.length
+                }
+                onClick={() => setActiveCategory(index)}
+                className={`h-1.5 transition-all ${index === activeCategory ? "w-8 bg-[#6C3FEA]" : "w-4 bg-[#E5E7EB] hover:bg-[#6C3FEA]"}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,176 +1,182 @@
 "use client";
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCreateCategoryMutation } from "@/lib/api/api";
 
 export default function CreateCategoryPage() {
+  const router = useRouter();
+  const [createCategory, { isLoading, error }] = useCreateCategoryMutation();
+  const [success, setSuccess] = useState("");
   const [category, setCategory] = useState({
     name: "",
     slug: "",
     description: "",
-    status: "Active",
-    featured: false,
+    thumbnail: null,
   });
 
-  const thumbnail =
-    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800";
-
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, files } = e.target;
+    setCategory((current) => ({
+      ...current,
+      [name]: name === "thumbnail" ? files?.[0] || null : value,
+    }));
+  };
 
-    setCategory({
-      ...category,
-      [name]: type === "checkbox" ? checked : value,
-    });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSuccess("");
+    try {
+      await createCategory(category).unwrap();
+      setSuccess("Category created.");
+      router.push("/admin/categories");
+    } catch {
+      setSuccess("");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-[#F8F9FC] p-4 sm:p-6 lg:p-8">
+      <form onSubmit={handleSubmit}>
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
 
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
-              Catalog control
-            </p>
-            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
-              Create Category
-            </h1>
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#6C3FEA]">
+                Catalog control
+              </p>
+              <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#101827]">
+                Create Category
+              </h1>
 
-            <p className="text-gray-500 mt-2 ">
-              Add a new category to your VibeMood store.
-            </p>
+              <p className="text-gray-500 mt-2 ">
+                Add a new category to your VibeMood store.
+              </p>
+            </div>
+
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="bg-[#6C3FEA] px-6 py-3 font-extrabold text-white transition hover:bg-[#101827] disabled:opacity-60"
+            >
+              {isLoading ? "Saving..." : "Save Category"}
+            </button>
           </div>
 
-          <button className="bg-[#ef6c2f] px-6 py-3 font-extrabold text-white transition hover:bg-[#151515]">
-            Save Category
-          </button>
-        </div>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Left */}
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left */}
+            <div className="lg:col-span-2">
+              <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
+                <h2 className="text-xl font-semibold mb-6 text-gray-500">
+                  Category Information
+                </h2>
 
-          <div className="lg:col-span-2">
-            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
-              <h2 className="text-xl font-semibold mb-6 text-gray-500">
-                Category Information
-              </h2>
+                <div className="space-y-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
+                      Category Name
+                    </label>
 
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">
-                    Category Name
-                  </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={category.name}
+                      onChange={handleChange}
+                      placeholder="Men Fashion"
+                      className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#6C3FEA]"
+                    />
+                  </div>
 
-                  <input
-                    type="text"
-                    name="name"
-                    value={category.name}
-                    onChange={handleChange}
-                    placeholder="Men Fashion"
-                    className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#E17100]"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
+                      Slug
+                    </label>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">
-                    Slug
-                  </label>
+                    <input
+                      type="text"
+                      name="slug"
+                      value={category.slug}
+                      onChange={handleChange}
+                      placeholder="men-fashion"
+                      className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#6C3FEA]"
+                    />
+                  </div>
 
-                  <input
-                    type="text"
-                    name="slug"
-                    value={category.slug}
-                    onChange={handleChange}
-                    placeholder="men-fashion"
-                    className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#E17100]"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
+                      Description
+                    </label>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">
-                    Description
-                  </label>
-
-                  <textarea
-                    rows={6}
-                    name="description"
-                    value={category.description}
-                    onChange={handleChange}
-                    placeholder="Write category description..."
-                    className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#E17100]"
-                  />
+                    <textarea
+                      rows={6}
+                      name="description"
+                      value={category.description}
+                      onChange={handleChange}
+                      placeholder="Write category description..."
+                      className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#6C3FEA]"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Right */}
+            {/* Right */}
 
-          <div className="space-y-6">
-            {/* Image */}
+            <div className="space-y-6">
+              {/* Image */}
 
-            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
-              <h2 className="text-xl font-semibold mb-5 text-gray-500">
-                Category Image
-              </h2>
-              {/* 
-              <Image
-              fill={true}
-                src={thumbnail}
-                width={500}
-                height={500}
-                alt="Category"
-                className="rounded-lg w-full"
-              /> */}
-
-              <button className="mt-5 flex w-full items-center justify-center gap-2 border-2 border-dashed border-[#ef6c2f] py-4 text-[#ef6c2f] transition hover:bg-[#fff0e9]">
-                <FaCloudUploadAlt />
-                Upload Image
-              </button>
-            </div>
-
-            {/* Settings */}
-
-            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
-              <h2 className="text-xl font-semibold text-gray-500 mb-5">
-                Settings
-              </h2>
-
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-500 mb-2">
-                    Status
-                  </label>
-
-                  <select
-                    name="status"
-                    value={category.status}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg p-3 text-gray-600 outline-none focus:border-[#E17100]"
-                  >
-                    <option>Active</option>
-                    <option>Inactive</option>
-                  </select>
-                </div>
-
-                <label className="flex items-center justify-between">
-                  <span className="text-gray-600">Featured Category</span>
-
+              <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
+                <h2 className="text-xl font-semibold mb-5 text-gray-500">
+                  Category Image
+                </h2>
+                <label className="mt-5 flex w-full cursor-pointer items-center justify-center gap-2 border-2 border-dashed border-[#6C3FEA] py-4 text-[#6C3FEA] transition hover:bg-[#F1EDFF]">
+                  <FaCloudUploadAlt />
+                  {category.thumbnail?.name || "Upload Image"}
                   <input
-                    type="checkbox"
-                    name="featured"
-                    checked={category.featured}
+                    className="sr-only"
+                    type="file"
+                    name="thumbnail"
+                    accept="image/*"
                     onChange={handleChange}
-                    className="h-5 w-5 accent-[#E17100]"
                   />
                 </label>
               </div>
+
+              {/* Settings */}
+
+              <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
+                <h2 className="text-xl font-semibold text-gray-500 mb-5">
+                  Settings
+                </h2>
+
+                <div className="space-y-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-2">
+                      Status
+                    </label>
+
+                    <p className="rounded-lg border bg-gray-50 p-3 text-sm text-gray-600">
+                      New categories are active when created.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        {error && (
+          <p role="alert" className="mt-4 text-sm text-red-700">
+            {error.data?.message || "Could not create category."}
+          </p>
+        )}
+        {success && (
+          <p role="status" className="mt-4 text-sm text-green-700">
+            {success}
+          </p>
+        )}
+      </form>
     </div>
   );
 }

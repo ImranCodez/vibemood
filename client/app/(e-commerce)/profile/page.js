@@ -1,7 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, Heart, Package, UserRound } from "lucide-react";
+import { useGetProfileQuery } from "@/lib/api/api";
 
 export default function ProfilePage() {
+  const {
+    data: profileResponse,
+    isLoading,
+    isError,
+    error,
+  } = useGetProfileQuery();
+  const profile = profileResponse?.data;
+
   return (
     <main className="min-h-[60vh] bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
@@ -15,12 +26,14 @@ export default function ProfilePage() {
               Your orders, details, and saved pieces in one place.
             </p>
           </div>
-          <Link
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate hover:underline"
-            href="/signin"
-          >
-            Sign in to your account <ArrowRight size={16} />
-          </Link>
+          {!profile && !isLoading && (
+            <Link
+              className="inline-flex items-center gap-2 text-sm font-semibold text-slate hover:underline"
+              href="/signin"
+            >
+              Sign in to your account <ArrowRight size={16} />
+            </Link>
+          )}
         </div>
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           <section className="rounded-xl border border-border bg-surface p-6 md:col-span-2">
@@ -29,12 +42,40 @@ export default function ProfilePage() {
                 <UserRound size={24} />
               </div>
               <div>
-                <h2 className="font-bold text-slate">Welcome to VibeMood</h2>
+                <h2 className="font-bold text-slate">
+                  {isLoading
+                    ? "Loading profile..."
+                    : profile?.fullname || "Welcome to VibeMood"}
+                </h2>
                 <p className="text-sm text-gray">
-                  Sign in to view your personal profile.
+                  {profile?.email ||
+                    (isError && error?.status === 401
+                      ? "Sign in to view your personal profile."
+                      : profile?.phone || "Your personal account details.")}
                 </p>
               </div>
             </div>
+            {profile && (
+              <dl className="mt-6 grid gap-4 border-t border-border pt-5 text-sm sm:grid-cols-2">
+                <div>
+                  <dt className="text-gray">Phone</dt>
+                  <dd className="mt-1 font-semibold text-slate">
+                    {profile.phone || "Not provided"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-gray">Address</dt>
+                  <dd className="mt-1 font-semibold text-slate">
+                    {profile.address || "Not provided"}
+                  </dd>
+                </div>
+              </dl>
+            )}
+            {isError && error?.status !== 401 && (
+              <p role="alert" className="mt-4 text-sm text-red-700">
+                Could not load your profile.
+              </p>
+            )}
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <Link
                 className="flex items-center justify-between rounded-lg border border-border p-4 text-sm font-semibold text-slate hover:border-slate"

@@ -21,7 +21,7 @@ const {
 // ...........signup part...//
 const signupuser = async (req, res) => {
   try {
-    const { fullname, email, password, phone, address, role } = req.body;
+    const { fullname, email, password, phone, address } = req.body;
     if (!fullname) return sendResponse(res, 400, "fullname is required");
     if (!email) return sendResponse(res, 400, "email is required");
     if (!isValidEmail(email))
@@ -38,7 +38,7 @@ const signupuser = async (req, res) => {
       email: email.toLowerCase(),
       password,
       phone,
-      role,
+      role: "user",
       address,
       otp: generateOTP,
       otpExpires: Date.now() + 2 * 60 * 1000,
@@ -49,7 +49,7 @@ const signupuser = async (req, res) => {
       template: emailvarifyTemplate,
       otp: generateOTP,
     });
-    user.save();
+    await user.save();
     sendResponse(res, 201, "signup is successfull");
   } catch (error) {
     sendResponse(res, 500, false, "Internal server error");
@@ -111,7 +111,7 @@ const verifyOtp = async (req, res) => {
     if (user.otpExpires < Date.now()) {
       return res.status(400).send("OTP expired");
     }
-    req.user
+    req.user;
     // 5️⃣ Update user (verify)
     user.isVerified = true;
     user.otp = null;
@@ -161,16 +161,16 @@ const regenerateOtp = async (req, res) => {
 // ........forgatepass............//
 const forgatepass = async (req, res) => {
   try {
-    const user = await userSchema
-      .findOne({ email: req.body.email })
-      .select("_id email");
+    const user = await User.findOne({ email: req.body.email }).select(
+      "_id email",
+    );
     if (!user) {
       return sendResponse(res, 404, "with this email user not exist");
     }
     const { resetPasswordToken, resetToken } = resetpassToken();
     user.resetPasstken = resetPasswordToken;
     user.resetExpire = Date.now() + 15 * 60 * 1000;
-    user.save();
+    await user.save();
     let ResetLink = `${"http://localhost:8000/"}auth/resetpass/${resetToken}`;
     sendEmail({
       email: user.email,
@@ -190,7 +190,7 @@ const resetpassword = async (req, res) => {
     if (!newpass) return sendResponse(res, 400, "New password is required");
     if (!token) return sendResponse(res, 400, "page is not found");
     const verfyhashtoken = hashverifytoken(token);
-    const dbuser = await userSchema.findOne({
+    const dbuser = await User.findOne({
       resetPasstken: verfyhashtoken,
       resetExpire: { $gt: Date.now() },
     });
@@ -198,34 +198,35 @@ const resetpassword = async (req, res) => {
     dbuser.password = newpass;
     dbuser.resetPasstken = undefined;
     dbuser.resetExpire = undefined;
-    dbuser.save();
+    await dbuser.save();
     sendResponse(res, 200, "password updated successfull", true);
   } catch (error) {
     sendResponse(res, 500, "Internal server error");
     console.log(error);
   }
 };
-  const getprofile = async (req, res) => {
-    try {
-      const user = await userSchema
-        .findById(req.user.id)
-        .select("-otp -updatedAt -otpExpires");
-      if (!user) return sendResponse(res, 400, "Inavlid request");
+const getprofile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "-otp -updatedAt -otpExpires",
+    );
+    if (!user) return sendResponse(res, 400, "Inavlid request");
 
-      sendResponse(res, 200, "", true, user);
-    } catch (error) {
-      sendResponse(res, 500, "Internal server error");
-    }
-  };
+    sendResponse(res, 200, "", true, user);
+  } catch (error) {
+    sendResponse(res, 500, "Internal server error");
+  }
+};
 
 const UpdateProfile = async (req, res) => {
   try {
     const { fullname, address, phone } = req.body;
     const UserId = req.user.id;
     const avatar = req.file;
-    const user = await userSchema
-      .findById(UserId)
-      .select("-password -isVerified -otp -otpExpires -createdAt -updatedAt");
+    const user = await User.findById(UserId).select(
+      "-password -isVerified -otp -otpExpires -createdAt -updatedAt",
+    );
+    if (!user) return sendResponse(res, 404, "User not found");
     // cloudinerAcout_1
     if (avatar) {
       // https://res.cloudinary.com/doyafbivx/image/upload/v1772552335/avatar/mxuamgwizfsusq4x5lpl.png
@@ -238,8 +239,8 @@ const UpdateProfile = async (req, res) => {
     if (fullname) user.fullname = fullname;
     if (address) user.address = address;
     if (phone) user.phone = phone;
-    user.save();
-    sendResponse(res, 201, "your update is scucessfull", true, user);
+    await user.save();
+    sendResponse(res, 200, "your update is successful", true, user);
   } catch (error) {
     sendResponse(res, 500, "Inernal server error Boss!");
   }
@@ -254,7 +255,7 @@ const refreshrtoken = async (req, res) => {
 
     // ........verfy...//
     const decoded = verifyToken(refreshtoken);
-    if (!decoded) return sendResponse(res, 400, "");
+    if (!decoded) return sendResponse(res, 400, "Invalid refresh token");
     const accessToken = generateAccsToken(decoded);
     const cookieAcsOptions = {
       httpOnly: false, // Prevents client-side JavaScript from accessing the cookie, mitigating XSS
@@ -262,7 +263,8 @@ const refreshrtoken = async (req, res) => {
       secure: false, // Ensures the cookie is only sent over HTTPS (set to false for local HTTP development)
       // sameSite: 'Strict', // Mitigates CSRF attacks by ensuring cookies are only sent for same-site requests
     };
-    req.cookie("accessToken", accessToken, cookieAcsOptions);
+    res.cookie("accessToken", accessToken, cookieAcsOptions);
+    return sendResponse(res, 200, "Access token refreshed", true);
   } catch (error) {
     sendResponse(res, 500, "Internal server error");
     console.log(error);

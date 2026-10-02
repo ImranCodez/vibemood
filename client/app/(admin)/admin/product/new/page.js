@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FaCloudUploadAlt, FaPlus, FaTimes } from "react-icons/fa";
 import Input from "@/app/components/ui/input";
 import Button from "@/app/components/ui/Button";
@@ -11,6 +12,9 @@ import {
 } from "@/app/(admin)/services/api";
 import { generateSlug } from "@/app/components/utils/sluggenerater";
 export default function CreateProductPage() {
+  const router = useRouter();
+  const thumbnailInput = useRef(null);
+  const galleryInput = useRef(null);
   const {
     data: categoryList,
     isLoading: categoriesLoading,
@@ -42,6 +46,26 @@ export default function CreateProductPage() {
       images: [...prev.images, ...files],
     }));
   };
+
+  const resetForm = () => {
+    setFormError("");
+    setProduct({
+      title: "",
+      description: "",
+      slug: "",
+      category: "",
+      price: "",
+      discountpercentage: "",
+      tags: "",
+      variants: "",
+      thumbnail: null,
+      images: [],
+      isActive: "",
+    });
+    setVariants([{ id: 1, color: "", sizes: "s", sku: "NM-00001", stock: "" }]);
+    if (thumbnailInput.current) thumbnailInput.current.value = "";
+    if (galleryInput.current) galleryInput.current.value = "";
+  };
   const handlremoveimg = (index) => {
     const img = newproduct.images.filter((item, i) => i !== index);
     setProduct((prev) => ({ ...prev, images: img }));
@@ -58,15 +82,11 @@ export default function CreateProductPage() {
   ]);
 
   const addVariant = () => {
-    setVariants([
-      ...variants,
-      {
-        id: Date.now(),
-        color: "",
-        sizes: "",
-        sku: `NM-${Math.floor(Math.random() * 100000)}`,
-        stock: "",
-      },
+    const id = crypto.randomUUID();
+    const sku = `NM-${id.slice(0, 8).toUpperCase()}`;
+    setVariants((current) => [
+      ...current,
+      { id, color: "", sizes: "", sku, stock: "" },
     ]);
   };
   const handelInputVariant = (id, field, value) => {
@@ -121,22 +141,27 @@ export default function CreateProductPage() {
     }
 
     setFormError("");
-    await createNewproduct({
-      ...newproduct,
-      variants,
-      isActive: true,
-    });
+    try {
+      await createNewproduct({
+        ...newproduct,
+        variants,
+        isActive: true,
+      }).unwrap();
+      router.push("/admin/product");
+    } catch {
+      setFormError("Product could not be created. Review the API error below.");
+    }
   };
   return (
-    <section className="min-h-screen bg-[#f7f6f2] p-4 pb-24 sm:p-6 lg:p-8">
+    <section className="min-h-screen bg-[#F8F9FC] p-4 pb-24 sm:p-6 lg:p-8">
       <form onSubmit={handleuploadnewproduct}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+              <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#6C3FEA]">
                 Catalog control
               </p>
-              <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
+              <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#101827]">
                 Create Product
               </h1>
 
@@ -148,7 +173,7 @@ export default function CreateProductPage() {
               <Button
                 type="submit"
                 loading={isCreating}
-                className="flex-1 bg-[#ef6c2f] px-4 py-3 font-extrabold text-white hover:bg-[#151515] sm:flex-none sm:px-6"
+                className="flex-1 bg-[#6C3FEA] px-4 py-3 font-extrabold text-white hover:bg-[#101827] sm:flex-none sm:px-6"
               >
                 {" "}
                 Save Product
@@ -157,6 +182,10 @@ export default function CreateProductPage() {
                 variant="danger"
                 className="w-20 shrink-0 text-[17px] shadow-xl"
                 type="reset"
+                onClick={(event) => {
+                  event.preventDefault();
+                  resetForm();
+                }}
               >
                 Reset
               </Button>
@@ -167,7 +196,7 @@ export default function CreateProductPage() {
             {/* LEFT */}
 
             <div className="min-w-0 flex-1 space-y-4 bg-white">
-              <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+              <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
                 <h2 className="font-bold text-gray-700 text-xl mb-5">
                   Product Information
                 </h2>
@@ -221,7 +250,7 @@ export default function CreateProductPage() {
                         }))
                       }
                       rows={6}
-                      className="w-full border rounded-lg p-3 text-gray-500 mt-2 focus:border-[#E17100] outline-none"
+                      className="w-full border rounded-lg p-3 text-gray-500 mt-2 focus:border-[#6C3FEA] outline-none"
                       placeholder="Write product description..."
                     />
                   </div>
@@ -318,15 +347,19 @@ export default function CreateProductPage() {
                           thumbnail: e.target.files[0],
                         }));
                       }}
+                      inputRef={thumbnailInput}
                       type="file"
                       label={"Upload thumbnail"}
+                      accept="image/*"
                     />
                     <div>
                       <Input
                         onChange={handleimages}
+                        inputRef={galleryInput}
                         type="file"
                         multiple
                         label={"Upload images"}
+                        accept="image/*"
                       />
                     </div>
                   </div>
@@ -335,7 +368,7 @@ export default function CreateProductPage() {
 
               {/* Variants */}
 
-              <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+              <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
                 <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
                   <h2 className="font-bold text-xl text-gray-700">
                     Product Variants
@@ -357,7 +390,7 @@ export default function CreateProductPage() {
                           onChange={(e) =>
                             handelInputVariant(item.id, "sizes", e.target.value)
                           }
-                          className="w-full rounded-lg px-3 py-3 text-[#000000] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-[#E17100]"
+                          className="w-full rounded-lg px-3 py-3 text-[#101827] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-[#6C3FEA]"
                         >
                           {["s", "m", "l", "xl", "2xl", "3xl"].map((size) => (
                             <option key={size} value={size}>
@@ -421,6 +454,7 @@ export default function CreateProductPage() {
                 )}
                 <Button
                   type="button"
+                  onClick={() => thumbnailInput.current?.click()}
                   className=" rounded-lg w-full py-4 flex justify-center items-center gap-2"
                 >
                   <FaCloudUploadAlt />
@@ -459,6 +493,7 @@ export default function CreateProductPage() {
                 </div>
                 <Button
                   type="button"
+                  onClick={() => galleryInput.current?.click()}
                   className=" mt-5 rounded-lg w-full py-4 flex justify-center items-center gap-2"
                 >
                   <FaCloudUploadAlt />
@@ -470,10 +505,9 @@ export default function CreateProductPage() {
                 <h2 className="font-bold text-xl mb-4 text-gray-800">
                   Product Settings
                 </h2>
-                <label className="flex items-center justify-between">
-                  <span className="text-gray-500"> Featured Product</span>
-                  <input type="checkbox" />
-                </label>
+                <p className="text-sm text-gray-500">
+                  New products are published as active after saving.
+                </p>
               </div>
             </div>
           </div>

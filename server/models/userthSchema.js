@@ -4,8 +4,8 @@ const sendResponse = require("../services/responsiveHandler");
 
 const userAuthSchema = new mongoose.Schema(
   {
-    avatar:{
-      type:String,
+    avatar: {
+      type: String,
     },
     fullname: {
       type: String,
@@ -29,12 +29,12 @@ const userAuthSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "admin",
-      enum: ["admin", "user","editor"],
+      default: "user",
+      enum: ["admin", "user", "editor"],
     },
     isVerified: {
       type: Boolean,
-      default:false,
+      default: false,
     },
     otp: {
       type: String,
@@ -54,7 +54,7 @@ const userAuthSchema = new mongoose.Schema(
 );
 
 // 🔐 Hash password before save
-userAuthSchema.pre("save", async function (next){
+userAuthSchema.pre("save", async function (next) {
   const user = this;
   if (!user.isModified("password")) return;
 

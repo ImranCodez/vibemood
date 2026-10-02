@@ -19,7 +19,7 @@ const CreateNewcategory = async (req, res) => {
       description,
       thumbnail: thumimg.secure_url,
     });
-    category.save();
+    await category.save();
     sendResponse(res, 201, "category created successfull", true, category);
   } catch (error) {
     sendResponse(res, 500, "Internal server error");

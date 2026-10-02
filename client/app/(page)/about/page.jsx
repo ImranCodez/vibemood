@@ -6,7 +6,7 @@ const AboutPage=()=> {
       {/* Hero Section */}
       <section className="bg-black text-white py-24">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <span className="text-[#E17100] uppercase tracking-widest font-semibold">
+          <span className="text-[#6C3FEA] uppercase tracking-widest font-semibold">
             Our Story
           </span>
 
@@ -42,7 +42,7 @@ const AboutPage=()=> {
             </p>
 
             <p className="text-gray-600">
-              We believe fashion isn't just about clothing—it's about
+              We believe fashion isn&apos;t just about clothing—it&apos;s about
               confidence, identity, and making a lasting impression.
             </p>
           </div>
@@ -58,7 +58,7 @@ const AboutPage=()=> {
       </section>
 
       {/* Stats */}
-      <section className="bg-[#E17100] py-16">
+      <section className="bg-[#6C3FEA] py-16">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-8 text-center text-white">
           <div>
             <h3 className="text-4xl font-bold">10K+</h3>

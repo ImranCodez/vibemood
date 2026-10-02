@@ -2,26 +2,23 @@
 
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, SlidersHorizontal } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useGetProductsQuery } from "@/lib/api/api";
 import { withProductDefaults } from "../../../lib/catalog";
 
 export default function ShopPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: productsResponse,
+    isLoading: loading,
+    isError,
+  } = useGetProductsQuery({ limit: 24 });
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [stockFilter, setStockFilter] = useState("all");
   const [sortBy, setSortBy] = useState("latest");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/product/getproduct?limit=24")
-      .then((response) => response.json())
-      .then((result) => {
-        setProducts((result.data?.prodcuts || []).map(withProductDefaults));
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  const products = (productsResponse?.data?.prodcuts || []).map(
+    withProductDefaults,
+  );
 
   const categories = [
     ...new Set(
@@ -54,7 +51,7 @@ export default function ShopPage() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-5 border-b border-border pb-8 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#e17000]">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#6C3FEA]">
               VibeMood collection
             </p>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-slate">
@@ -79,7 +76,7 @@ export default function ShopPage() {
               <select
                 value={categoryFilter}
                 onChange={(event) => setCategoryFilter(event.target.value)}
-                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#e17000]"
+                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#6C3FEA]"
               >
                 <option value="all">All categories</option>
                 {categories.map((category) => (
@@ -94,7 +91,7 @@ export default function ShopPage() {
               <select
                 value={stockFilter}
                 onChange={(event) => setStockFilter(event.target.value)}
-                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#e17000]"
+                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#6C3FEA]"
               >
                 <option value="all">All stock</option>
                 <option value="available">Available</option>
@@ -106,7 +103,7 @@ export default function ShopPage() {
               <select
                 value={sortBy}
                 onChange={(event) => setSortBy(event.target.value)}
-                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#e17000]"
+                className="mt-2 w-full border border-border bg-white p-3 text-sm font-normal normal-case tracking-normal outline-none focus:border-[#6C3FEA]"
               >
                 <option value="latest">Latest</option>
                 <option value="price-low">Price low to high</option>
@@ -117,6 +114,11 @@ export default function ShopPage() {
           </div>
         )}
         {loading && <p className="mt-8 text-gray">Loading the collection...</p>}
+        {isError && (
+          <p className="mt-8 text-red-700">
+            The collection could not be loaded.
+          </p>
+        )}
         {!loading && filteredProducts.length === 0 && (
           <p className="mt-8 text-gray">No products are available right now.</p>
         )}
@@ -139,13 +141,13 @@ export default function ShopPage() {
                 </Link>
                 <Link
                   href={`/productDetails/${product.slug}`}
-                  className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#e17000] hover:text-white"
+                  className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#6C3FEA] hover:text-white"
                 >
                   <ShoppingCart size={14} /> + Cart
                 </Link>
               </div>
               <div className="p-5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#e17000]">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#6C3FEA]">
                   {product.category?.name || "Collection"}
                 </p>
                 <h2 className="mt-2 text-lg font-extrabold text-slate">

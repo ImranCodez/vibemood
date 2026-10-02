@@ -6,12 +6,12 @@ const ContactPage = () => {
       {/* Hero */}
       <section className="bg-black text-white py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <span className="text-[#e17000] uppercase tracking-widest font-semibold">
+          <span className="text-[#6C3FEA] uppercase tracking-widest font-semibold">
             Contact Us
           </span>
 
           <h1 className="text-5xl font-bold mt-4">
-            We'd Love To Hear From You
+            We&apos;d Love To Hear From You
           </h1>
 
           <p className="max-w-2xl mx-auto mt-4 text-gray-300">
@@ -26,34 +26,30 @@ const ContactPage = () => {
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div>
-            <h2 className="text-4xl font-bold text-[#000000c7] mb-8">
+            <h2 className="text-4xl font-bold text-[#101827] mb-8">
               Get In Touch
             </h2>
 
             <div className="space-y-6">
-              <div className="border-l-4 border-[#e17000] pl-4">
-                <h3 className="font-semibold text-[#000000c7] text-lg">
-                  Email
-                </h3>
+              <div className="border-l-4 border-[#6C3FEA] pl-4">
+                <h3 className="font-semibold text-[#101827] text-lg">Email</h3>
                 <p className="text-gray-600">imranhossaianratul@gmail.com</p>
               </div>
 
-              <div className="border-l-4 border-[#e17000] pl-4">
-                <h3 className="font-semibold text-[#000000c7] text-lg">
-                  Phone
-                </h3>
+              <div className="border-l-4 border-[#6C3FEA] pl-4">
+                <h3 className="font-semibold text-[#101827] text-lg">Phone</h3>
                 <p className="text-gray-600">+8801 60813 1058</p>
               </div>
 
-              <div className="border-l-4 border-[#e17000] pl-4">
-                <h3 className="font-semibold text-lg text-[#000000c7]">
+              <div className="border-l-4 border-[#6C3FEA] pl-4">
+                <h3 className="font-semibold text-lg text-[#101827]">
                   Address
                 </h3>
                 <p className="text-gray-600">Dhaka, Bangladesh</p>
               </div>
 
-              <div className="border-l-4 border-[#e17000] pl-4">
-                <h3 className="font-semibold text-lg text-[#000000c7]">
+              <div className="border-l-4 border-[#6C3FEA] pl-4">
+                <h3 className="font-semibold text-lg text-[#101827]">
                   Business Hours
                 </h3>
                 <p className="text-gray-600">Mon - Sat : 9:00 AM - 8:00 PM</p>
@@ -63,7 +59,7 @@ const ContactPage = () => {
 
           {/* Form */}
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg">
-            <h2 className="text-3xl font-bold mb-6 text-[#000000c7]">
+            <h2 className="text-3xl font-bold mb-6 text-[#101827]">
               Send A Message
             </h2>
 
@@ -71,30 +67,30 @@ const ContactPage = () => {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none text-gray-600 focus:border-[#E17100]"
+                className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none text-gray-600 focus:border-[#6C3FEA]"
               />
 
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full border text-gray-600 border-gray-300 rounded-lg p-4 focus:outline-none focus:border-[#E17100]"
+                className="w-full border text-gray-600 border-gray-300 rounded-lg p-4 focus:outline-none focus:border-[#6C3FEA]"
               />
 
               <input
                 type="text"
                 placeholder="Subject"
-                className="w-full border border-gray-300 text-gray-600 rounded-lg p-4 focus:outline-none focus:border-[#E17100]"
+                className="w-full border border-gray-300 text-gray-600 rounded-lg p-4 focus:outline-none focus:border-[#6C3FEA]"
               />
 
               <textarea
                 rows="6"
                 placeholder="Your Message"
-                className="w-full border text-gray-600 border-gray-300 rounded-lg p-4 focus:outline-none focus:border-[#E17100]"
+                className="w-full border text-gray-600 border-gray-300 rounded-lg p-4 focus:outline-none focus:border-[#6C3FEA]"
               />
 
               <button
                 type="submit"
-                className="bg-[#e17000] hover:bg-[#151515] transition text-white font-semibold px-8 py-4 rounded-lg w-full"
+                className="bg-[#6C3FEA] hover:bg-[#101827] transition text-white font-semibold px-8 py-4 rounded-lg w-full"
               >
                 Send Message
               </button>

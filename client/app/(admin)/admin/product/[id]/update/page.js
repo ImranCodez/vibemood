@@ -1,50 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { FaArrowLeft, FaCloudUploadAlt, FaSave } from "react-icons/fa";
+import {
+  useGetCategoriesQuery,
+  useGetProductBySlugQuery,
+  useUpdateProductMutation,
+} from "@/lib/api/api";
 
 export default function UpdateProductPage() {
-  const [product, setProduct] = useState({
-    title: "Oversized Graphic T-Shirt",
-    category: "Men",
-    price: 1499,
-    discount: 15,
-    stock: 52,
-    sku: "VM-TS-001",
-    description:
-      "Premium oversized cotton t-shirt with high quality graphic print. Comfortable fit for everyday wear.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800",
-    // images: [
-    //   "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800",
-    //   "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=800",
-    //   "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800",
-    // ],
-  });
+  const { id: slug } = useParams();
+  const {
+    data: productResponse,
+    isLoading,
+    isError,
+  } = useGetProductBySlugQuery(slug, { skip: !slug });
+  const { data: categoriesResponse } = useGetCategoriesQuery();
+  const loadedProduct = Array.isArray(productResponse?.data)
+    ? productResponse.data[0]
+    : productResponse?.data;
+  const categories = categoriesResponse?.data || [];
+
+  if (isLoading)
+    return <main className="p-8 text-gray-600">Loading product...</main>;
+  if (isError || !loadedProduct)
+    return (
+      <main className="p-8 text-red-700">Product could not be loaded.</main>
+    );
+
+  return (
+    <ProductEditForm
+      slug={slug}
+      loadedProduct={loadedProduct}
+      categories={categories}
+    />
+  );
+}
+
+function ProductEditForm({ slug, loadedProduct, categories }) {
+  const router = useRouter();
+  const galleryInput = useRef(null);
+  const [updateProduct, { isLoading: isSaving, error: saveError }] =
+    useUpdateProductMutation();
+  const [product, setProduct] = useState(() => ({
+    title: loadedProduct.title,
+    category: loadedProduct.category?._id || loadedProduct.category,
+    price: loadedProduct.price,
+    discountpercentage: loadedProduct.discountpercentage || 0,
+    description: loadedProduct.description,
+    thumbnail: null,
+    images: [],
+    variants: loadedProduct.variants || [],
+    tags: loadedProduct.tags || [],
+    isActive: true,
+  }));
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setProduct({
       ...product,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.name === "thumbnail"
+          ? e.target.files?.[0] || null
+          : e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(product);
-
-    alert("Product Updated Successfully!");
+    setMessage("");
+    try {
+      await updateProduct({ slug, ...product }).unwrap();
+      setMessage("Product updated successfully.");
+      router.push("/admin/product");
+    } catch {
+      setMessage("");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F8F9FC] p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <button className="flex items-center gap-2 text-gray-600 hover:text-[#ef6c2f]">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-gray-600 hover:text-[#6C3FEA]"
+            >
               <FaArrowLeft />
               Back
             </button>
@@ -59,21 +105,27 @@ export default function UpdateProductPage() {
           </div>
 
           <button
-            onClick={handleSubmit}
-            className="flex items-center gap-2 bg-[#ef6c2f] px-6 py-3 font-extrabold text-white transition hover:bg-[#151515]"
+            type="submit"
+            form="edit-product"
+            disabled={isSaving}
+            className="flex items-center gap-2 bg-[#6C3FEA] px-6 py-3 font-extrabold text-white transition hover:bg-[#101827]"
           >
             <FaSave />
-            Update Product
+            {isSaving ? "Saving..." : "Update Product"}
           </button>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left */}
 
-          <div className="lg:col-span-2 border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+          <div className="lg:col-span-2 border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
             <h2 className="text-xl font-semibold mb-6">Product Information</h2>
 
-            <form className="space-y-5">
+            <form
+              id="edit-product"
+              className="space-y-5"
+              onSubmit={handleSubmit}
+            >
               <div>
                 <label className="font-medium block mb-2">Product Title</label>
 
@@ -82,7 +134,7 @@ export default function UpdateProductPage() {
                   name="title"
                   value={product.title}
                   onChange={handleChange}
-                  className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#E17100]"
+                  className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#6C3FEA]"
                 />
               </div>
 
@@ -96,10 +148,11 @@ export default function UpdateProductPage() {
                     onChange={handleChange}
                     className="w-full border rounded-lg px-4 py-3"
                   >
-                    <option>Men</option>
-                    <option>Women</option>
-                    <option>Accessories</option>
-                    <option>Shoes</option>
+                    {categories.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -109,8 +162,17 @@ export default function UpdateProductPage() {
                   <input
                     type="text"
                     name="sku"
-                    value={product.sku}
-                    onChange={handleChange}
+                    value={product.variants[0]?.sku || ""}
+                    onChange={(event) =>
+                      setProduct((current) => ({
+                        ...current,
+                        variants: current.variants.map((variant, index) =>
+                          index === 0
+                            ? { ...variant, sku: event.target.value }
+                            : variant,
+                        ),
+                      }))
+                    }
                     className="w-full border rounded-lg px-4 py-3"
                   />
                 </div>
@@ -134,8 +196,8 @@ export default function UpdateProductPage() {
 
                   <input
                     type="number"
-                    name="discount"
-                    value={product.discount}
+                    name="discountpercentage"
+                    value={product.discountpercentage}
                     onChange={handleChange}
                     className="w-full border rounded-lg px-4 py-3"
                   />
@@ -147,8 +209,17 @@ export default function UpdateProductPage() {
                   <input
                     type="number"
                     name="stock"
-                    value={product.stock}
-                    onChange={handleChange}
+                    value={product.variants[0]?.stock || 0}
+                    onChange={(event) =>
+                      setProduct((current) => ({
+                        ...current,
+                        variants: current.variants.map((variant, index) =>
+                          index === 0
+                            ? { ...variant, stock: Number(event.target.value) }
+                            : variant,
+                        ),
+                      }))
+                    }
                     className="w-full border rounded-lg px-4 py-3"
                   />
                 </div>
@@ -173,43 +244,90 @@ export default function UpdateProductPage() {
           <div className="space-y-6">
             {/* Thumbnail */}
 
-            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+            <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
               <h2 className="font-semibold mb-4">Thumbnail</h2>
 
-              <img
-                src={product.thumbnail}
-                alt=""
-                className="rounded-lg h-72 object-cover w-full"
-              />
+              {product.thumbnail ? (
+                <p className="text-sm text-gray-600">
+                  {product.thumbnail.name}
+                </p>
+              ) : (
+                <img
+                  src={loadedProduct.thumbnail}
+                  alt={loadedProduct.title}
+                  className="h-72 w-full rounded-lg object-cover"
+                />
+              )}
 
-              <button className="mt-5 flex w-full items-center justify-center gap-2 border border-dashed border-[#ef6c2f] py-3 text-[#ef6c2f] hover:bg-[#fff0e9]">
+              <label className="mt-5 flex w-full cursor-pointer items-center justify-center gap-2 border border-dashed border-[#6C3FEA] py-3 text-[#6C3FEA] hover:bg-[#F1EDFF]">
                 <FaCloudUploadAlt />
                 Change Thumbnail
-              </button>
+                <input
+                  className="sr-only"
+                  type="file"
+                  name="thumbnail"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+              </label>
             </div>
 
             {/* Gallery */}
 
-            <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+            <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
               <h2 className="font-semibold mb-4">Product Images</h2>
 
-              {/* <div className="grid grid-cols-3 gap-3">
-
-                {product.images.map((image, index) => (
+              <div className="grid grid-cols-3 gap-3">
+                {(loadedProduct.images || []).map((image, index) => (
                   <img
-                    key={index}
+                    key={`${image}-${index}`}
                     src={image}
-                    alt=""
-                    className="h-24 rounded-lg object-cover"
+                    alt={`${loadedProduct.title} view ${index + 1}`}
+                    className="h-24 w-full rounded-lg object-cover"
                   />
                 ))}
+                {product.images.map((image, index) => (
+                  <img
+                    key={`${image.name}-${index}`}
+                    src={URL.createObjectURL(image)}
+                    alt={`New product image ${index + 1}`}
+                    className="h-24 w-full rounded-lg object-cover"
+                  />
+                ))}
+              </div>
 
-              </div> */}
-
-              <button className="mt-5 flex w-full items-center justify-center gap-2 border border-dashed border-[#ef6c2f] py-3 text-[#ef6c2f] hover:bg-[#fff0e9]">
+              <button
+                type="button"
+                onClick={() => galleryInput.current?.click()}
+                className="mt-5 flex w-full items-center justify-center gap-2 border border-dashed border-[#6C3FEA] py-3 text-[#6C3FEA] hover:bg-[#F1EDFF]"
+              >
                 <FaCloudUploadAlt />
                 Upload More Images
               </button>
+              <input
+                ref={galleryInput}
+                className="sr-only"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(event) => {
+                  const files = Array.from(event.target.files || []);
+                  if (
+                    (loadedProduct.images?.length || 0) +
+                      product.images.length +
+                      files.length >
+                    4
+                  ) {
+                    setMessage("A product can have up to four gallery images.");
+                    return;
+                  }
+                  setProduct((current) => ({
+                    ...current,
+                    images: [...current.images, ...files],
+                  }));
+                  setMessage("");
+                }}
+              />
             </div>
           </div>
         </div>
@@ -217,18 +335,34 @@ export default function UpdateProductPage() {
         {/* Footer */}
 
         <div className="mt-8 flex justify-end gap-4">
-          <button className="border px-6 py-3 rounded-lg hover:bg-gray-100">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="border px-6 py-3 rounded-lg hover:bg-gray-100"
+          >
             Cancel
           </button>
 
           <button
-            onClick={handleSubmit}
-            className="flex items-center gap-2 bg-[#ef6c2f] px-8 py-3 font-extrabold text-white hover:bg-[#151515]"
+            type="submit"
+            form="edit-product"
+            disabled={isSaving}
+            className="flex items-center gap-2 bg-[#6C3FEA] px-8 py-3 font-extrabold text-white hover:bg-[#101827]"
           >
             <FaSave />
-            Update Product
+            {isSaving ? "Saving..." : "Update Product"}
           </button>
         </div>
+        {message && (
+          <p role="status" className="mt-4 text-sm text-green-700">
+            {message}
+          </p>
+        )}
+        {saveError && (
+          <p role="alert" className="mt-4 text-sm text-red-700">
+            {saveError.data?.message || "Could not update product."}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -2,56 +2,65 @@
 
 import Link from "next/link";
 import { ArrowLeft, Minus, Plus, ShoppingBag } from "lucide-react";
-import { useEffect, useState } from "react";
-
-const API_URL = "http://localhost:8000";
+import { useState } from "react";
+import {
+  useCheckoutMutation,
+  useGetCartQuery,
+  useUpdateCartMutation,
+} from "@/lib/api/api";
 
 function getCart(result) {
   return result?.data?.cart || result?.data || result?.cart || null;
 }
 
 export default function CartPage() {
-  const [cart, setCart] = useState(null);
-  const [status, setStatus] = useState("loading");
+  const { data: cartResponse, isLoading, isError, error } = useGetCartQuery();
+  const [updateCartRequest] = useUpdateCartMutation();
+  const [checkout, { isLoading: isCheckingOut }] = useCheckoutMutation();
   const [message, setMessage] = useState("");
-
-  const loadCart = async () => {
-    try {
-      const response = await fetch(`${API_URL}/cart/getall`, {
-        credentials: "include",
-      });
-      const result = await response.json();
-      if (response.status === 401) {
-        setStatus("signin");
-        return;
-      }
-      if (!response.ok || result.success === false)
-        throw new Error(result.message || "Could not load cart");
-      setCart(getCart(result));
-      setStatus("ready");
-    } catch (error) {
-      setMessage(error.message || "The server is unavailable.");
-      setStatus("error");
-    }
-  };
-
-  useEffect(() => {
-    loadCart();
-  }, []);
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [insideDhaka, setInsideDhaka] = useState(true);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [orderNumber, setOrderNumber] = useState("");
+  const cart = getCart(cartResponse);
+  const status = isLoading
+    ? "loading"
+    : isError && error?.status === 401
+      ? "signin"
+      : isError
+        ? "error"
+        : "ready";
 
   const updateQuantity = async (item, quantity) => {
     if (quantity < 1) return;
-    const response = await fetch(`${API_URL}/cart/update`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      await updateCartRequest({
         itemId: item._id,
         productId: item.product?._id || item.product,
         quantity,
-      }),
-    });
-    if (response.ok) loadCart();
+      }).unwrap();
+      setMessage("");
+    } catch (updateError) {
+      setMessage(updateError.data?.message || "Could not update your cart.");
+    }
+  };
+
+  const placeOrder = async (event) => {
+    event.preventDefault();
+    setMessage("");
+    try {
+      const result = await checkout({
+        paymentyp: "cash",
+        CartId: cart._id,
+        deliveryCharge: insideDhaka ? 70 : 120,
+        insideDhaka: String(insideDhaka),
+        shippingAddress,
+      }).unwrap();
+      setOrderNumber(result.data?.orderNumber || "");
+      setCheckoutOpen(false);
+    } catch (checkoutError) {
+      setMessage(checkoutError.data?.message || "Could not place the order.");
+    }
   };
 
   const items = cart?.items || [];
@@ -59,12 +68,13 @@ export default function CartPage() {
     (sum, item) => sum + Number(item.subtotal || 0),
     0,
   );
+  const deliveryCharge = insideDhaka ? 70 : 120;
 
   return (
     <main className="min-h-[60vh] bg-background px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center gap-3">
-          <ShoppingBag className="text-[#ef6c2f]" />
+          <ShoppingBag className="text-[#6C3FEA]" />
           <h1 className="text-3xl font-extrabold tracking-tight text-slate">
             Your cart
           </h1>
@@ -82,7 +92,7 @@ export default function CartPage() {
               Your saved products are connected to your account.
             </p>
             <Link
-              className="mt-6 inline-flex bg-[#ef6c2f] px-5 py-3 text-sm font-bold text-white"
+              className="mt-6 inline-flex bg-[#6C3FEA] px-5 py-3 text-sm font-bold text-white"
               href="/signin"
             >
               Sign in
@@ -94,9 +104,11 @@ export default function CartPage() {
             <h2 className="text-xl font-extrabold text-slate">
               Cart unavailable
             </h2>
-            <p className="mt-2 text-gray">{message}</p>
+            <p className="mt-2 text-gray">
+              {message || error?.data?.message || "The server is unavailable."}
+            </p>
             <Link
-              className="mt-6 inline-flex items-center gap-2 font-bold text-[#ef6c2f]"
+              className="mt-6 inline-flex items-center gap-2 font-bold text-[#6C3FEA]"
               href="/shop"
             >
               <ArrowLeft size={16} /> Continue shopping
@@ -112,7 +124,7 @@ export default function CartPage() {
               Browse the collection and add pieces you love.
             </p>
             <Link
-              className="mt-6 inline-flex items-center gap-2 bg-[#ef6c2f] px-5 py-3 text-sm font-bold text-white"
+              className="mt-6 inline-flex items-center gap-2 bg-[#6C3FEA] px-5 py-3 text-sm font-bold text-white"
               href="/shop"
             >
               <ArrowLeft size={16} /> Continue shopping
@@ -133,7 +145,7 @@ export default function CartPage() {
                       {String(item.product?._id || item.product).slice(-6)}
                     </p>
                     <p className="mt-1 text-sm text-gray">SKU: {item.sku}</p>
-                    <p className="mt-2 font-bold text-[#ef6c2f]">
+                    <p className="mt-2 font-bold text-[#6C3FEA]">
                       ৳ {Number(item.subtotal || 0).toLocaleString()}
                     </p>
                     <div className="mt-3 flex items-center gap-2">
@@ -168,13 +180,73 @@ export default function CartPage() {
               </div>
               <div className="mt-4 flex justify-between text-lg font-extrabold">
                 <span>Total</span>
-                <span>৳ {total.toLocaleString()}</span>
+                <span>৳ {(total + deliveryCharge).toLocaleString()}</span>
               </div>
-              <button className="mt-6 w-full bg-[#ef6c2f] px-5 py-3 font-extrabold text-white hover:bg-[#151515]">
-                Ready to checkout
-              </button>
+              <p className="mt-2 text-xs text-gray">
+                Includes ৳{deliveryCharge} delivery
+              </p>
+              {!checkoutOpen && !orderNumber && (
+                <button
+                  type="button"
+                  onClick={() => setCheckoutOpen(true)}
+                  className="mt-6 w-full bg-[#6C3FEA] px-5 py-3 font-extrabold text-white hover:bg-[#101827]"
+                >
+                  Checkout
+                </button>
+              )}
+              {checkoutOpen && (
+                <form
+                  onSubmit={placeOrder}
+                  className="mt-6 space-y-4 border-t border-border pt-5"
+                >
+                  <label className="block text-sm font-semibold text-slate">
+                    Shipping address
+                    <textarea
+                      required
+                      value={shippingAddress}
+                      onChange={(event) =>
+                        setShippingAddress(event.target.value)
+                      }
+                      className="mt-2 min-h-24 w-full border border-border p-3 font-normal outline-none focus:border-[#6C3FEA]"
+                    />
+                  </label>
+                  <label className="block text-sm font-semibold text-slate">
+                    Delivery area
+                    <select
+                      value={String(insideDhaka)}
+                      onChange={(event) =>
+                        setInsideDhaka(event.target.value === "true")
+                      }
+                      className="mt-2 w-full border border-border bg-white p-3 font-normal"
+                    >
+                      <option value="true">Inside Dhaka (৳70)</option>
+                      <option value="false">Outside Dhaka (৳120)</option>
+                    </select>
+                  </label>
+                  <p className="text-sm text-gray">Payment: Cash on delivery</p>
+                  <button
+                    disabled={isCheckingOut}
+                    className="w-full bg-[#6C3FEA] px-5 py-3 font-extrabold text-white hover:bg-[#101827] disabled:opacity-60"
+                  >
+                    {isCheckingOut ? "Placing order..." : "Place order"}
+                  </button>
+                </form>
+              )}
+              {orderNumber && (
+                <p
+                  role="status"
+                  className="mt-5 text-sm font-semibold text-green-700"
+                >
+                  Order {orderNumber} placed successfully.
+                </p>
+              )}
             </aside>
           </div>
+        )}
+        {message && status === "ready" && (
+          <p role="alert" className="mt-4 text-sm text-red-700">
+            {message}
+          </p>
         )}
       </div>
     </main>

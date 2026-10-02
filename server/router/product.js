@@ -13,7 +13,7 @@ const upload = multer();
 route.post(
   "/create",
   authMiddleware,
-  rolecheckmiddleware("user", "admin"),
+  rolecheckmiddleware("admin"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 4 },
@@ -23,7 +23,7 @@ route.post(
 route.get("/getproduct", getproductLis);
 route.get("/prodcutdetails/:slug", singleproductsdeatils);
 route.put(
-  "/update",
+  "/update/:slug",
   authMiddleware,
   rolecheckmiddleware("admin"),
   upload.fields([

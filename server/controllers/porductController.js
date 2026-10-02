@@ -1,8 +1,5 @@
 const productSchema = require("../models/productSchema");
-const {
-  UploadTcloudinery,
-  DeletfromCloudinary,
-} = require("../services/cloudinerservice");
+const { UploadTcloudinery } = require("../services/cloudinerservice");
 const sendResponse = require("../services/responsiveHandler");
 const categorySchema = require("../models/categorySchema");
 const SIZE_ENUM = require("../services/utils");
@@ -221,73 +218,102 @@ const updateroduct = async (req, res) => {
       isActive,
     } = req.body;
     const { slug } = req.params;
-    const thumbnail = req.files?.thumbnail;
-    const images = req.files?.images;
     const productdata = await productSchema.findOne({ slug });
-    if (title) productdata.title = title;
-    if (description) productdata.description = description;
-    if (category) productdata.category = category;
-    if (discountpercentage) productdata.discountpercentage = discountpercentage;
-    if (price) productdata.price = price;
+    if (!productdata) return sendResponse(res, 404, "product not found");
 
-    if (tags?.length > 0 && Array.isArray(tags)) productdata.tages = tags;
-    if (isActive) productdata.isActive = isActive = "true";
-    // .........apadoto parse....** varints part.....//
-    const varinatsData = JSON.parse(variants); //
-    if (varinatsData?.length > 0 && Array.isArray(varinatsData)) {
-      for (const variant of varinatsData) {
+    if (title !== undefined) productdata.title = title;
+    if (description !== undefined) productdata.description = description;
+    if (category !== undefined) productdata.category = category;
+    if (discountpercentage !== undefined)
+      productdata.discountpercentage = Number(discountpercentage);
+    if (price !== undefined) productdata.price = Number(price);
+    if (tags !== undefined) {
+      productdata.tags = Array.isArray(tags)
+        ? tags
+        : tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean);
+    }
+    if (isActive !== undefined)
+      productdata.isActive = isActive === true || isActive === "true";
+
+    if (variants !== undefined) {
+      let variantsData;
+      try {
+        variantsData =
+          typeof variants === "string" ? JSON.parse(variants) : variants;
+      } catch {
+        return sendResponse(res, 400, "variants must be valid JSON");
+      }
+      if (!Array.isArray(variantsData) || variantsData.length === 0)
+        return sendResponse(res, 400, "minimum 1 variant is required");
+      for (const variant of variantsData) {
         if (!variant.sku) return sendResponse(res, 400, "sku is required");
         if (!variant.color) return sendResponse(res, 400, "color is required");
         if (!variant.sizes) return sendResponse(res, 400, "size is required");
-        if (!variant.SIZE_ENUM.includes(size))
+        if (!SIZE_ENUM.includes(variant.sizes))
           return sendResponse(res, 400, "invalid size");
-        if (!variant.stock || variant.stock < 1)
+        if (Number(variant.stock) < 1)
           return sendResponse(
             res,
             400,
             "stock is required and must be more then 0",
           );
       }
+      if (
+        new Set(variantsData.map((variant) => variant.sku)).size !==
+        variantsData.length
+      )
+        return sendResponse(res, 400, "sku must be unique");
+      productdata.variants = variantsData;
     }
-    // .......thumbnail img cloudinery part .......//
+
+    const thumbnail = req.files?.thumbnail?.[0];
+    const images = req.files?.images || [];
     if (thumbnail) {
-      const imagPublId = productdata.thumbnail.split("/").pop().split(".")[0];
-      DeletfromCloudinary(`product${imagPublId}`);
       const imgres = await UploadTcloudinery(thumbnail, "product");
+      if (!imgres?.secure_url)
+        return sendResponse(res, 500, "thumbnail upload failed");
       productdata.thumbnail = imgres.secure_url;
     }
-    // ......iamge update incoudinery part ..//
-    let imgurl = [];
-    let totallimage = productdata.images.length;
-    if (destroyImage.length > 0) totallimage -= destroyImage;
-    if (Array.isArray(images) && images.length > 0)
-      totallimage += images.length;
-    if (images && images?.length > 4)
-      return sendResponse(res, 400, "you cant't upload images max 4");
-    imgurl = await Promise.all(
+
+    let imagesToRemove = destroyImage || [];
+    if (typeof imagesToRemove === "string") {
+      try {
+        imagesToRemove = JSON.parse(imagesToRemove);
+      } catch {
+        return sendResponse(res, 400, "destroyImage must be valid JSON");
+      }
+    }
+    if (!Array.isArray(imagesToRemove))
+      return sendResponse(res, 400, "destroyImage must be an array");
+
+    const retainedImages = productdata.images.filter(
+      (image) => !imagesToRemove.includes(image),
+    );
+    const uploadedImages = await Promise.all(
       images.map(async (image) => {
         const imagesUrl = await UploadTcloudinery(image, "product");
-        return imagesUrl.secure_url;
+        return imagesUrl?.secure_url;
       }),
     );
+    if (uploadedImages.some((image) => !image))
+      return sendResponse(res, 500, "product image upload failed");
+    if (retainedImages.length + uploadedImages.length > 4)
+      return sendResponse(res, 400, "you can upload a maximum of 4 images");
+    productdata.images = [...retainedImages, ...uploadedImages];
 
-    if (Array.isArray(destroyImage) && destroyImage.length > 0) {
-      for (const Url of destroyImage) {
-        const imagPublId = Url.split("/").pop().split(".")[0];
-        DeletfromCloudinary(`product${imagPublId}`);
-      }
-      if (totallimage > 4)
-        return sendResponse(res, 400, " you can upload maxium 4 images");
-      if (totallimage > 1)
-        return sendResponse(res, 400, " minimum 1 image should be stay");
-      let FilterImage = productdata.images.filter((items) => {
-        return !destroyImage.includes(items);
-      });
-    }
-    let allimges = imgurl.concat(FilterImage);
-    if (imgurl.length > 0) productdata.images = allimges;
-    productdata.svae();
+    await productdata.save();
+    return sendResponse(
+      res,
+      200,
+      "product updated successfully",
+      true,
+      productdata,
+    );
   } catch (error) {
+    console.log(error);
     sendResponse(res, 500, "Internal server error");
   }
 };

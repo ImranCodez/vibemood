@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Check, Minus, Plus, ShoppingBag } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-
-const API_URL = "http://localhost:8000";
+import { useMemo, useState } from "react";
+import { useAddToCartMutation, useGetProductBySlugQuery } from "@/lib/api/api";
 
 function getProduct(data) {
   if (Array.isArray(data)) return data[0];
@@ -14,39 +13,17 @@ function getProduct(data) {
 
 export default function ProductDetailsPage() {
   const { slug } = useParams();
-  const [product, setProduct] = useState(null);
+  const {
+    data: productResponse,
+    isLoading: loading,
+    isError,
+  } = useGetProductBySlugQuery(slug, { skip: !slug });
+  const [addToCartRequest] = useAddToCartMutation();
+  const product = getProduct(productResponse?.data);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    if (!slug) return;
-
-    const loadProduct = async () => {
-      try {
-        setStatus("loading");
-        const response = await fetch(
-          `${API_URL}/product/prodcutdetails/${encodeURIComponent(slug)}`,
-          { credentials: "include" },
-        );
-        const result = await response.json();
-        if (!response.ok || result.success === false) {
-          throw new Error(result.message || "Product not found");
-        }
-        const loadedProduct = getProduct(result.data);
-        if (!loadedProduct) throw new Error("Product not found");
-        setProduct(loadedProduct);
-        setStatus("ready");
-      } catch (error) {
-        setMessage(error.message);
-        setStatus("error");
-      }
-    };
-
-    loadProduct();
-  }, [slug]);
 
   const images = useMemo(
     () =>
@@ -65,30 +42,26 @@ export default function ProductDetailsPage() {
     if (!variant) return;
     setMessage("");
     try {
-      const response = await fetch(`${API_URL}/cart/add`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product._id,
-          sku: variant.sku,
-          quantity,
-        }),
-      });
-      const result = await response.json();
-      if (response.status === 401) {
-        setMessage("Please sign in to add items to your cart.");
-      } else if (!response.ok || result.success === false) {
+      const result = await addToCartRequest({
+        productId: product._id,
+        sku: variant.sku,
+        quantity,
+      }).unwrap();
+      if (result.success === false) {
         setMessage(result.message || "Could not add this item.");
       } else {
         setMessage("Added to your cart.");
       }
-    } catch {
-      setMessage("The server is unavailable. Please try again.");
+    } catch (error) {
+      if (error.status === 401) {
+        setMessage("Please sign in to add items to your cart.");
+      } else {
+        setMessage(error.data?.message || "Could not add this item.");
+      }
     }
   };
 
-  if (status === "loading") {
+  if (loading) {
     return (
       <main className="min-h-[60vh] bg-background px-4 py-16 text-center text-gray">
         Loading product...
@@ -96,13 +69,13 @@ export default function ProductDetailsPage() {
     );
   }
 
-  if (status === "error") {
+  if (isError || !product) {
     return (
       <main className="min-h-[60vh] bg-background px-4 py-16 text-center">
         <h1 className="text-2xl font-bold text-slate">Product unavailable</h1>
-        <p className="mt-2 text-gray">{message}</p>
+        <p className="mt-2 text-gray">{message || "Product not found."}</p>
         <Link
-          className="mt-6 inline-flex items-center gap-2 font-semibold text-[#ef6c2f]"
+          className="mt-6 inline-flex items-center gap-2 font-semibold text-[#6C3FEA]"
           href="/shop"
         >
           <ArrowLeft size={16} /> Back to shop
@@ -128,7 +101,7 @@ export default function ProductDetailsPage() {
                 <button
                   key={image}
                   type="button"
-                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-gray-soft sm:h-20 sm:w-20 ${selectedImage === index ? "border-[#ef6c2f]" : "border-transparent"}`}
+                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-gray-soft sm:h-20 sm:w-20 ${selectedImage === index ? "border-[#6C3FEA]" : "border-transparent"}`}
                   onClick={() => setSelectedImage(index)}
                   aria-label={`View image ${index + 1}`}
                 >
@@ -150,7 +123,7 @@ export default function ProductDetailsPage() {
           </section>
 
           <section className="self-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-[#ef6c2f]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#6C3FEA]">
               {product.category?.name || "VibeMood collection"}
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate sm:text-5xl">
@@ -165,7 +138,7 @@ export default function ProductDetailsPage() {
                   <span className="text-lg text-gray line-through">
                     ${Number(product.price).toFixed(2)}
                   </span>
-                  <span className="text-sm font-bold text-[#ef6c2f]">
+                  <span className="text-sm font-bold text-[#6C3FEA]">
                     {product.discountpercentage}% off
                   </span>
                 </>
@@ -191,7 +164,7 @@ export default function ProductDetailsPage() {
                         setSelectedVariant(index);
                         setQuantity(1);
                       }}
-                      className={`rounded-lg border p-3 text-left text-sm ${selectedVariant === index ? "border-[#ef6c2f] bg-[#fff0e9]" : "border-border"} disabled:cursor-not-allowed disabled:opacity-40`}
+                      className={`rounded-lg border p-3 text-left text-sm ${selectedVariant === index ? "border-[#6C3FEA] bg-[#F1EDFF]" : "border-border"} disabled:cursor-not-allowed disabled:opacity-40`}
                     >
                       <span className="block font-semibold text-slate">
                         {item.color} / {item.sizes}
@@ -230,7 +203,7 @@ export default function ProductDetailsPage() {
                 </button>
               </div>
               <button
-                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#ef6c2f] px-4 font-semibold text-white hover:bg-[#151515] disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
+                className="inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#6C3FEA] px-4 font-semibold text-white hover:bg-[#101827] disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
                 type="button"
                 disabled={!variant || variant.stock < 1}
                 onClick={addToCart}
@@ -239,7 +212,7 @@ export default function ProductDetailsPage() {
               </button>
             </div>
             {message && (
-              <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#ef6c2f]">
+              <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#6C3FEA]">
                 <Check size={16} /> {message}
               </p>
             )}

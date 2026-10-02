@@ -1,16 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #f7f6f2;
-  --color-surface: #ffffff;
-  --color-text: #151515;
-  --color-slate: #151515;
-  --color-slate-light: #4b4b4b;
-  --color-gray: #77746f;
-  --color-gray-soft: #efeee9;
-  --color-border: #e5e2dc;
-  --color-accent: #e17000;
-  --color-accent-soft: #fff3e6;
+  --primary: #6c3fea;
+  --primary-hover: #5930d4;
+  --primary-light: #f1edff;
+  --dark: #101827;
+  --dark-secondary: #182235;
+  --text: #111827;
+  --text-secondary: #667085;
+  --white: #ffffff;
+  --background: #f8f9fc;
+  --border: #e5e7eb;
+  --success: #8bc34a;
+  --danger: #ef4444;
+}
+
+@theme inline {
+  --color-white: var(--white);
+  --color-black: var(--dark);
+  --color-background: var(--background);
+  --color-surface: var(--white);
+  --color-text: var(--text);
+  --color-slate: var(--dark);
+  --color-slate-light: var(--dark-secondary);
+  --color-gray: var(--text-secondary);
+  --color-gray-soft: var(--primary-light);
+  --color-border: var(--border);
+  --color-accent: var(--primary);
+  --color-accent-soft: var(--primary-light);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-dark: var(--dark);
+  --color-dark-secondary: var(--dark-secondary);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-gray-50: var(--background);
+  --color-gray-100: var(--primary-light);
+  --color-gray-200: var(--border);
+  --color-gray-300: var(--border);
+  --color-gray-400: #98a2b3;
+  --color-gray-500: var(--text-secondary);
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: var(--dark-secondary);
+  --color-gray-900: var(--dark);
+  --color-gray-950: var(--dark);
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-400: var(--danger);
+  --color-red-500: var(--danger);
+  --color-red-600: var(--danger);
+  --color-red-700: #b42318;
+  --color-green-100: #f1f8e9;
+  --color-green-600: var(--success);
+  --color-green-700: #4b7b1f;
+  --color-amber-100: var(--primary-light);
+  --color-amber-200: var(--primary-light);
+  --color-amber-50: var(--primary-light);
+  --color-amber-600: var(--primary);
+  --color-amber-700: var(--primary-hover);
+  --color-amber-800: var(--primary-hover);
+  --color-yellow-100: var(--primary-light);
+  --color-yellow-600: var(--primary);
+  --color-yellow-700: var(--primary-hover);
 }
 
 * {
@@ -23,8 +76,8 @@
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-text);
+  background: var(--background);
+  color: var(--text);
   font-family: var(--font-manrope), sans-serif;
   min-width: 320px;
   overflow-x: hidden;
@@ -66,8 +119,8 @@ a {
 input,
 select,
 textarea {
-  border-color: var(--color-border);
-  color: var(--color-text);
+  border-color: var(--border);
+  color: var(--text);
 }
 
 button:focus-visible,
@@ -75,7 +128,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--color-slate-light);
+  outline: 2px solid var(--dark-secondary);
   outline-offset: 2px;
 }
 

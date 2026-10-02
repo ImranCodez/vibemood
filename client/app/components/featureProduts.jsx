@@ -2,17 +2,15 @@
 
 import Link from "next/link";
 import { ArrowRight, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useGetProductsQuery } from "@/lib/api/api";
 import { withProductDefaults } from "../../lib/catalog";
-
-const API_URL = "http://localhost:8000";
 
 function ProductCard({ product }) {
   const price = product.price * (1 - (product.discountpercentage || 0) / 100);
 
   return (
     <article className="group min-w-0">
-      <div className="relative aspect-[0.84] overflow-hidden bg-[#e8e5de]">
+      <div className="relative aspect-[0.84] overflow-hidden rounded-[7px] bg-[#F1EDFF]">
         <Link
           href={`/productDetails/${product.slug}`}
           aria-label={`View ${product.title}`}
@@ -24,23 +22,23 @@ function ProductCard({ product }) {
           />
         </Link>
         {product.discountpercentage > 0 && (
-          <span className="absolute left-3 top-3 bg-[#e17000] px-2.5 py-1 text-[11px] font-extrabold text-white">
+          <span className="absolute left-3 top-3 bg-[#6C3FEA] px-2.5 py-1 text-[11px] font-extrabold text-white">
             -{product.discountpercentage}%
           </span>
         )}
         <Link
           href={`/productDetails/${product.slug}`}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#e17000] hover:text-white"
+          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-[5px] bg-white px-3 py-2 text-xs font-extrabold text-black shadow-sm transition hover:bg-[#6C3FEA] hover:text-white"
         >
           <ShoppingCart size={14} /> + Cart
         </Link>
       </div>
       <div className="pt-4">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#e17000]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#6C3FEA]">
           {product.category?.name || "Collection"}
         </p>
         <Link href={`/productDetails/${product.slug}`}>
-          <h3 className="mt-1.5 truncate text-sm font-extrabold text-[#151515] hover:text-[#e17000] sm:text-base">
+          <h3 className="mt-1.5 truncate text-sm font-extrabold text-[#101827] hover:text-[#6C3FEA] sm:text-base">
             {product.title}
           </h3>
         </Link>
@@ -49,7 +47,7 @@ function ProductCard({ product }) {
             ৳ {Math.round(price).toLocaleString()}
           </span>
           {product.discountpercentage > 0 && (
-            <span className="text-xs text-[#99958e] line-through">
+            <span className="text-xs text-[#667085] line-through">
               ৳ {Number(product.price).toLocaleString()}
             </span>
           )}
@@ -60,27 +58,17 @@ function ProductCard({ product }) {
 }
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch(`${API_URL}/product/getproduct?limit=8`, {
-      signal: controller.signal,
-    })
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((result) => {
-        setProducts((result.data?.prodcuts || []).map(withProductDefaults));
-      })
-      .catch(() => {});
-    return () => controller.abort();
-  }, []);
+  const { data: productsResponse } = useGetProductsQuery({ limit: 8 });
+  const products = (productsResponse?.data?.prodcuts || []).map(
+    withProductDefaults,
+  );
 
   return (
     <section className="bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between gap-4 border-b border-[#e5e2dc] pb-5">
+        <div className="mb-8 flex items-end justify-between gap-4 border-b border-[#E5E7EB] pb-5">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#e17000]">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#6C3FEA]">
               Just dropped
             </p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -89,7 +77,7 @@ export default function FeaturedProducts() {
           </div>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1 text-sm font-bold hover:text-[#e17000]"
+            className="inline-flex items-center gap-1 text-sm font-bold hover:text-[#6C3FEA]"
           >
             Shop all <ArrowRight size={16} />
           </Link>
@@ -100,7 +88,7 @@ export default function FeaturedProducts() {
           ))}
         </div>
         {products.length === 0 && (
-          <p className="py-12 text-center text-sm text-[#77746f]">
+          <p className="py-12 text-center text-sm text-[#667085]">
             No products are available yet.
           </p>
         )}

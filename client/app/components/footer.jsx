@@ -18,7 +18,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h2 className="text-3xl font-bold text-white">
-              <span className="text-[#e17000]">Vibe</span>Mood
+              <span className="text-[#6C3FEA]">Vibe</span>Mood
             </h2>
 
             <p className="mt-5 leading-7 text-gray-400">
@@ -26,7 +26,7 @@ export default function Footer() {
               and affordable prices. Elevate your everyday look.
             </p>
 
-            {/* <button className="mt-6 rounded-lg bg-[#e17000] px-6 py-3 font-medium text-white transition hover:bg-white hover:text-black">
+            {/* <button className="mt-6 rounded-lg bg-[#6C3FEA] px-6 py-3 font-medium text-white transition hover:bg-white hover:text-black">
               Shop Now
             </button> */}
             <Button className="px-6 py-3">shop now</Button>
@@ -43,7 +43,7 @@ export default function Footer() {
                 <li key={item}>
                   <a
                     href={`${item}`}
-                    className="transition hover:text-[#e17000]"
+                    className="transition hover:text-[#6C3FEA]"
                   >
                     {item}
                   </a>
@@ -61,7 +61,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {customerService.map((item) => (
                 <li key={item}>
-                  <a href="#" className="transition hover:text-[#e17000]">
+                  <a href="#" className="transition hover:text-[#6C3FEA]">
                     {item}
                   </a>
                 </li>
@@ -83,7 +83,7 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full rounded-lg border border-gray-700 bg-transparent px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-[#e17000]"
+                className="w-full rounded-lg border border-gray-700 bg-transparent px-4 py-3 text-white placeholder:text-gray-500 outline-none transition focus:border-[#6C3FEA]"
               />
 
               <Button className="py-3 w-full">Subscribe</Button>
@@ -100,15 +100,15 @@ export default function Footer() {
         <p>© 2026 VibeMood. All rights reserved.</p>
 
         <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:justify-end">
-          <a href="#" className="hover:text-[#e17000] transition">
+          <a href="#" className="hover:text-[#6C3FEA] transition">
             Privacy Policy
           </a>
 
-          <a href="#" className="hover:text-[#e17000] transition">
+          <a href="#" className="hover:text-[#6C3FEA] transition">
             Terms & Conditions
           </a>
 
-          <a href="#" className="hover:text-[#e17000] transition">
+          <a href="#" className="hover:text-[#6C3FEA] transition">
             Cookies
           </a>
         </div>

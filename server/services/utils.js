@@ -1,4 +1,3 @@
-const SIZE_ENUM = ["s", "m", "L", "xl", "2xl", "3xl"];
+const SIZE_ENUM = ["s", "m", "l", "xl", "2xl", "3xl"];
 
-
-module.exports=SIZE_ENUM;
+module.exports = SIZE_ENUM;

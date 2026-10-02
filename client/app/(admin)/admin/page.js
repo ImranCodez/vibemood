@@ -1,57 +1,100 @@
 "use client";
 import Header from "@/app/components/admin/Header";
 import StatCard from "@/app/components/admin/StartCart";
+import { useGetAdminOrdersQuery, useGetAdminSummaryQuery } from "@/lib/api/api";
 
 export default function Dashboard() {
+  const {
+    data: summaryResponse,
+    isLoading: summaryLoading,
+    isError: summaryError,
+  } = useGetAdminSummaryQuery();
+  const { data: ordersResponse, isLoading: ordersLoading } =
+    useGetAdminOrdersQuery();
+  const summary = summaryResponse?.data;
+  const orders = ordersResponse?.data || [];
+
   return (
-    <main className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
+    <main className="min-h-screen bg-[#F8F9FC] p-4 sm:p-6 lg:p-8">
       <Header />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Revenue" value="৳18,420" color="text-[#ef6c2f]" />
+        <StatCard
+          title="Revenue"
+          value={
+            summaryLoading
+              ? "..."
+              : `৳${Number(summary?.revenue || 0).toLocaleString()}`
+          }
+          color="text-[#6C3FEA]"
+        />
 
-        <StatCard title="Orders" value="520" color="text-[#151515]" />
+        <StatCard
+          title="Orders"
+          value={summaryLoading ? "..." : (summary?.orders ?? 0)}
+          color="text-[#101827]"
+        />
 
-        <StatCard title="Customers" value="1,250" color="text-[#151515]" />
+        <StatCard
+          title="Users"
+          value={summaryLoading ? "..." : (summary?.users ?? 0)}
+          color="text-[#101827]"
+        />
 
-        <StatCard title="Products" value="83" color="text-[#151515]" />
+        <StatCard
+          title="Products"
+          value={summaryLoading ? "..." : (summary?.products ?? 0)}
+          color="text-[#101827]"
+        />
       </div>
+
+      {summaryError && (
+        <p role="alert" className="mt-4 text-sm text-red-700">
+          Dashboard totals could not be loaded.
+        </p>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <div className="flex min-h-80 items-center justify-center border border-[#e5e2dc] bg-white text-xl font-extrabold text-[#77746f] shadow-[0_8px_24px_rgba(21,21,21,0.04)] lg:col-span-2">
-          Sales Chart
+        <div className="flex min-h-80 flex-col justify-center border border-[#E5E7EB] bg-white p-8 shadow-[0_8px_24px_rgba(16,24,39,0.04)] lg:col-span-2">
+          <h2 className="text-xl font-extrabold text-slate">Sales overview</h2>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-gray">
+            Revenue shown above is calculated from saved orders. A sales
+            timeline is not available because the server does not yet expose
+            historical sales analytics.
+          </p>
         </div>
 
-        <div className="border border-[#e5e2dc] bg-white p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+        <div className="border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
           <h2 className="mb-5 text-xl font-extrabold text-slate">
-            Top Products
+            Latest orders
           </h2>
-
-          <div className="space-y-4">
-            <div className="flex justify-between border-b border-border pb-3 text-sm text-gray">
-              <span>Nike Air Max</span>
-              <span>152 Sold</span>
+          {ordersLoading ? (
+            <p className="text-sm text-gray">Loading orders...</p>
+          ) : orders.length === 0 ? (
+            <p className="text-sm text-gray">No orders yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {orders.slice(0, 5).map((order) => (
+                <div
+                  key={order._id}
+                  className="flex justify-between gap-3 border-b border-border pb-3 text-sm last:border-0"
+                >
+                  <span className="min-w-0 truncate text-gray">
+                    {order.user?.fullname ||
+                      order.user?.email ||
+                      order.orderNumber}
+                  </span>
+                  <span className="shrink-0 font-semibold text-slate">
+                    ৳{Number(order.totalPrice || 0).toLocaleString()}
+                  </span>
+                </div>
+              ))}
             </div>
-
-            <div className="flex justify-between border-b border-border pb-3 text-sm text-gray">
-              <span>Hoodie</span>
-              <span>131 Sold</span>
-            </div>
-
-            <div className="flex justify-between border-b border-border pb-3 text-sm text-gray">
-              <span>T-shirt</span>
-              <span>120 Sold</span>
-            </div>
-
-            <div className="flex justify-between text-sm text-gray">
-              <span>Cap</span>
-              <span>98 Sold</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      <div className="mt-8 overflow-hidden border border-[#e5e2dc] bg-white p-4 text-gray sm:p-6 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+      <div className="mt-8 overflow-hidden border border-[#E5E7EB] bg-white p-4 text-gray sm:p-6 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
         <h2 className="mb-5 text-xl font-extrabold text-slate">
           Recent Orders
         </h2>
@@ -71,33 +114,23 @@ export default function Dashboard() {
             </thead>
 
             <tbody>
-              <tr className="border-b">
-                <td className="py-4">John Doe</td>
-
-                <td>
-                  <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full">
-                    Delivered
-                  </span>
-                </td>
-
-                <td>$120</td>
-
-                <td>Today</td>
-              </tr>
-
-              <tr className="border-b">
-                <td className="py-4">Alex</td>
-
-                <td>
-                  <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full">
-                    Pending
-                  </span>
-                </td>
-
-                <td>$220</td>
-
-                <td>Yesterday</td>
-              </tr>
+              {orders.slice(0, 5).map((order) => (
+                <tr className="border-b" key={order._id}>
+                  <td className="py-4">
+                    {order.user?.fullname || order.user?.email || "Customer"}
+                  </td>
+                  <td className="capitalize">{order.status}</td>
+                  <td>৳{Number(order.totalPrice || 0).toLocaleString()}</td>
+                  <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                </tr>
+              ))}
+              {!ordersLoading && orders.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="py-5 text-gray">
+                    No orders recorded.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

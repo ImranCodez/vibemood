@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSignInMutation } from "@/app/(admin)/services/api";
+import { useSignInMutation } from "@/lib/api/api";
 
 const SignInPage = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const SignInPage = () => {
       <div className="hidden lg:flex w-1/2 bg-black items-center justify-center p-12">
         <div>
           <h1 className="text-6xl font-bold text-white">
-            Vibe<span className="text-[#E17100]">Mood</span>
+            Vibe<span className="text-[#6C3FEA]">Mood</span>
           </h1>
 
           <p className="text-gray-300 mt-6 text-lg max-w-md">
@@ -34,7 +34,7 @@ const SignInPage = () => {
       {/* Right Side */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <p className="text-[#e17000] font-semibold uppercase tracking-widest">
+          <p className="text-[#6C3FEA] font-semibold uppercase tracking-widest">
             Welcome Back
           </p>
 
@@ -54,7 +54,7 @@ const SignInPage = () => {
                   }))
                 }
                 placeholder="Enter your email"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#6C3FEA]"
               />
             </div>
 
@@ -71,14 +71,14 @@ const SignInPage = () => {
                   }))
                 }
                 placeholder="Enter password"
-                className="w-full border rounded-lg p-4 outline-none focus:border-[#e17000]"
+                className="w-full border rounded-lg p-4 outline-none focus:border-[#6C3FEA]"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#e17000] text-white py-4 rounded-lg font-semibold hover:bg-[#151515] transition"
+              className="w-full bg-[#6C3FEA] text-white py-4 rounded-lg font-semibold hover:bg-[#101827] transition"
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </button>
@@ -92,7 +92,10 @@ const SignInPage = () => {
 
           <p className="text-center mt-6 text-gray-500">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#e17000] font-semibold">
+            <Link
+              href="/signin/signup"
+              className="text-[#6C3FEA] font-semibold"
+            >
               Sign Up
             </Link>
           </p>

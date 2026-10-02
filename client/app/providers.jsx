@@ -1,8 +1,8 @@
 "use client";
 
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { AdminApiService } from "./(admin)/services/api";
+import { api } from "@/lib/api/api";
 
 export default function Providers({ children }) {
-  return <ApiProvider api={AdminApiService}>{children}</ApiProvider>;
+  return <ApiProvider api={api}>{children}</ApiProvider>;
 }

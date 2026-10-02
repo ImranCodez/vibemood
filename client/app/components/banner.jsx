@@ -28,24 +28,30 @@ const Banner = () => {
       subtitle: "Designed For Confidence",
     },
   ];
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(1);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
   const touchStart = useRef(null);
+  const slides = [banners[banners.length - 1], ...banners, banners[0]];
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % banners.length);
+      setActiveSlide((current) => current + 1);
     }, 5000);
 
     return () => window.clearInterval(timer);
   }, [banners.length]);
 
   const nextSlide = () => {
-    setActiveSlide((current) => (current + 1) % banners.length);
+    setActiveSlide((current) => current + 1);
+  };
+
+  const previousSlide = () => {
+    setActiveSlide((current) => current - 1);
   };
 
   return (
     <section
-      className="bg-[#171717]"
+      className="bg-[#182235]"
       onTouchStart={(event) => {
         touchStart.current = event.touches[0].clientX;
       }}
@@ -54,21 +60,34 @@ const Banner = () => {
         const distance = event.changedTouches[0].clientX - touchStart.current;
         if (Math.abs(distance) > 45) {
           if (distance < 0) nextSlide();
-          else
-            setActiveSlide(
-              (current) => (current - 1 + banners.length) % banners.length,
-            );
+          else previousSlide();
         }
         touchStart.current = null;
       }}
     >
-      <div className="relative overflow-hidden">
+      <div
+        className="relative overflow-hidden"
+        style={{ containerType: "inline-size" }}
+      >
         <div
-          className="flex transition-transform duration-700 ease-in-out"
-          style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+          className={`flex ${transitionEnabled ? "transition-transform duration-700 ease-linear" : ""}`}
+          onTransitionEnd={(event) => {
+            if (event.target !== event.currentTarget) return;
+            if (activeSlide !== 0 && activeSlide !== banners.length + 1) return;
+
+            // Reposition from a cloned edge slide without animating the track backward.
+            setTransitionEnabled(false);
+            setActiveSlide(activeSlide === 0 ? banners.length : 1);
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => setTransitionEnabled(true));
+            });
+          }}
+          style={{
+            transform: `translateX(calc(-${activeSlide} * 100cqi))`,
+          }}
         >
-          {banners.map((banner) => (
-            <div key={banner.id} className="min-w-full">
+          {slides.map((banner, index) => (
+            <div key={`${banner.id}-${index}`} className="min-w-full">
               <div
                 className="relative min-h-132.5 bg-cover bg-center sm:min-h-150"
                 style={{
@@ -81,13 +100,13 @@ const Banner = () => {
                 {/* Content */}
                 <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6">
                   <div className="max-w-xl text-white">
-                    <span className="text-sm font-bold uppercase tracking-[0.28em] text-[#ff8a51]">
+                    <span className="text-sm font-bold uppercase tracking-[0.28em] text-[#6C3FEA]">
                       The VibeMood edit · 2026
                     </span>
 
                     <h1 className="mt-5 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
                       Everyday pieces,{" "}
-                      <span className="text-[#ff8a51]">better.</span>
+                      <span className="text-[#6C3FEA]">better.</span>
                     </h1>
 
                     <p className="mt-6 max-w-md text-base leading-7 text-white/80 sm:text-lg">
@@ -98,7 +117,7 @@ const Banner = () => {
                     <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
                       <Link
                         href="/shop"
-                        className="inline-flex items-center gap-2 bg-[#e17000] px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-black sm:px-8"
+                        className="inline-flex items-center gap-2 bg-[#6C3FEA] px-6 py-3.5 font-bold text-white transition hover:bg-[#5930D4] rounded-[7px] hover:text-white sm:px-8"
                       >
                         Shop Now
                         <ArrowRight size={18} />
@@ -117,9 +136,12 @@ const Banner = () => {
                 key={item.id}
                 type="button"
                 aria-label={`Show banner ${dotIndex + 1}`}
-                aria-current={dotIndex === activeSlide}
-                onClick={() => setActiveSlide(dotIndex)}
-                className={`h-1.5 transition-all ${dotIndex === activeSlide ? "w-8 bg-[#e17000]" : "w-4 bg-white/50 hover:bg-white"}`}
+                aria-current={
+                  dotIndex ===
+                  (activeSlide - 1 + banners.length) % banners.length
+                }
+                onClick={() => setActiveSlide(dotIndex + 1)}
+                className={`h-1.5 transition-all ${dotIndex === (activeSlide - 1 + banners.length) % banners.length ? "w-8 bg-[#6C3FEA]" : "w-4 bg-white/50 hover:bg-white"}`}
               />
             ))}
           </div>

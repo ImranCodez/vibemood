@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { useLazyGetCartQuery } from "@/lib/api/api";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -12,9 +13,11 @@ const navLinks = [
   { label: "Admin", href: "/admin" },
 ];
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [cartOpen, setCartOpen] = React.useState(false);
-  const [cartItems, setCartItems] = React.useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [loadCart, { data: cartResponse }] = useLazyGetCartQuery();
+  const cartItems = cartResponse?.data?.items || [];
+  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   const pathname = usePathname();
 
   const isActive = (href) =>
@@ -22,25 +25,17 @@ const Navbar = () => {
 
   const openCart = async () => {
     setCartOpen(true);
-    try {
-      const response = await fetch("http://localhost:8000/cart/getall", {
-        credentials: "include",
-      });
-      const result = await response.json();
-      setCartItems(result.data?.items || result.data?.cart?.items || []);
-    } catch {
-      setCartItems([]);
-    }
+    await loadCart();
   };
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-50 w-full border-b border-border bg-[#f7f6f2]/90 backdrop-blur-xl">
+      <header className="fixed left-0 top-0 z-50 w-full border-b border-border bg-[#F8F9FC]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:gap-6">
           <div className="flex min-w-0 shrink-0 items-center gap-2 lg:gap-5">
             <div className="shrink-0 text-2xl font-extrabold tracking-tight text-slate sm:text-3xl">
               <Link href="/">
-                Vibe<span className="text-[#e17000]">Mood</span>
+                Vibe<span className="text-[#6C3FEA]">Mood</span>
               </Link>
               <nav
                 className="hidden items-center gap-1 lg:flex"
@@ -48,7 +43,7 @@ const Navbar = () => {
               >
                 {navLinks.map((link) => (
                   <Link
-                    className={`px-3 py-2 text-sm font-bold transition ${isActive(link.href) ? "text-[#e17000]" : "text-gray hover:text-slate"}`}
+                    className={`px-3 py-2 text-sm font-bold transition ${isActive(link.href) ? "text-[#6C3FEA]" : "text-gray hover:text-slate"}`}
                     href={link.href}
                     key={link.label}
                   >
@@ -70,17 +65,17 @@ const Navbar = () => {
           <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
             <button
               type="button"
-              className="relative p-2.5 text-slate transition hover:text-[#e17000]"
+              className="relative p-2.5 text-slate transition hover:text-[#6C3FEA]"
               aria-label="Shopping cart"
               onClick={openCart}
             >
               <ShoppingBag className="h-5 w-5" strokeWidth={2.2} />
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#e17000] px-1 text-[10px] font-bold text-white">
-                0
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#6C3FEA] px-1 text-[10px] font-bold text-white">
+                {itemCount}
               </span>
             </button>
             <Link
-              className="p-2.5 text-slate transition hover:text-[#e17000]"
+              className="p-2.5 text-slate transition hover:text-[#6C3FEA]"
               href="/profile"
               aria-label="Your profile"
             >
@@ -125,7 +120,7 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex gap-2 bg-red-800">
               <Link
                 className="flex-1 rounded-lg border border-slate py-2 text-center text-sm font-semibold text-slate"
                 href="/signin"
@@ -134,7 +129,7 @@ const Navbar = () => {
               </Link>
               <Link
                 className="flex-1 rounded-lg bg-slate py-2 text-center text-sm font-semibold text-text-light"
-                href="/signup"
+                href="/signin/signup"
               >
                 Sign up
               </Link>
@@ -149,12 +144,12 @@ const Navbar = () => {
             type="button"
             aria-label="Close cart"
             onClick={() => setCartOpen(false)}
-            className="fixed inset-0 z-[55] bg-black/30"
+            className="fixed inset-0 z-55 bg-black/30"
           />
-          <aside className="fixed right-0 top-0 z-[60] flex h-full w-[min(24rem,92vw)] flex-col bg-white p-5 shadow-[-12px_0_40px_rgba(21,21,21,0.16)] animate-[slide-in-right_260ms_ease-out]">
+          <aside className="fixed right-0 top-0 z-60 flex h-full w-[min(24rem,92vw)] flex-col bg-white p-5 shadow-[-12px_0_40px_rgba(16,24,39,0.16)] animate-[slide-in-right_260ms_ease-out]">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#e17000]">
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6C3FEA]">
                   Your selection
                 </p>
                 <h2 className="mt-1 text-2xl font-extrabold">Cart</h2>
@@ -163,7 +158,7 @@ const Navbar = () => {
                 type="button"
                 aria-label="Close cart"
                 onClick={() => setCartOpen(false)}
-                className="p-2 text-gray hover:text-[#e17000]"
+                className="p-2 text-gray hover:text-[#6C3FEA]"
               >
                 <X size={20} />
               </button>
@@ -186,7 +181,7 @@ const Navbar = () => {
                           Quantity {item.quantity}
                         </p>
                       </div>
-                      <span className="font-extrabold text-[#e17000]">
+                      <span className="font-extrabold text-[#6C3FEA]">
                         ৳ {Number(item.subtotal || 0).toLocaleString()}
                       </span>
                     </div>
@@ -197,9 +192,9 @@ const Navbar = () => {
             <Link
               href="/cart"
               onClick={() => setCartOpen(false)}
-              className="w-full bg-[#e17000] px-5 py-3 text-center font-extrabold text-white hover:bg-[#151515]"
+              className="w-full bg-[#6C3FEA] rounded-[7px] px-5 py-3 text-center font-extrabold hover:text-[#e9dfdf] hover:bg-[#080c14]"
             >
-              View full cart
+              View full cart 
             </Link>
           </aside>
         </>

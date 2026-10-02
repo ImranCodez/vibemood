@@ -30,7 +30,7 @@ const CheckOut = async (req, res) => {
       },
       orderNumber,
     });
-    orderData.save();
+    await orderData.save();
     if (paymentyp === "cash") {
       return sendResponse(res, 200, "order placed successfully.", orderData);
     }

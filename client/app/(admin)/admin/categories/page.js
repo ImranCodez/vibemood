@@ -2,67 +2,27 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
-import { FaPlus, FaEdit, FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import { useGetCategoriesQuery } from "../../services/api";
-
-const sampleCategories = [
-  {
-    id: 1,
-    name: "Men",
-    slug: "men",
-    // image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500",
-    products: 54,
-    status: "Active",
-    createdAt: "12 Jul 2026",
-  },
-  {
-    id: 2,
-    name: "Women",
-    slug: "women",
-    // image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500",
-    products: 72,
-    status: "Active",
-    createdAt: "15 Jul 2026",
-  },
-  {
-    id: 3,
-    name: "Kids",
-    slug: "kids",
-    // image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=500",
-    products: 26,
-    status: "Active",
-    createdAt: "17 Jul 2026",
-  },
-  {
-    id: 4,
-    name: "Accessories",
-    slug: "accessories",
-    // image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500",
-    products: 18,
-    status: "Inactive",
-    createdAt: "18 Jul 2026",
-  },
-];
 
 export default function CategoriesPage() {
   const [search, setSearch] = useState("");
-
-  const filtered = sampleCategories.filter((item) =>
+  const { data, isLoading, isError } = useGetCategoriesQuery();
+  const categories = data?.data || [];
+  const filtered = categories.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()),
   );
-  const { data } = useGetCategoriesQuery();
-  console.log(data?.data);
 
   return (
-    <div className="min-h-screen bg-[#f7f6f2] p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#F8F9FC] p-4 sm:p-6 lg:p-8">
       {/* Header */}
 
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-5 mb-8">
         <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#ef6c2f]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-[#6C3FEA]">
             Catalog control
           </p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#151515]">
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#101827]">
             Categories
           </h1>
 
@@ -72,7 +32,7 @@ export default function CategoriesPage() {
         </div>
         <Link
           href="/admin/categories/new"
-          className="flex items-center gap-2 bg-[#ef6c2f] px-5 py-3 font-extrabold text-white transition hover:bg-[#151515]"
+          className="flex items-center gap-2 bg-[#6C3FEA] px-5 py-3 font-extrabold text-white transition hover:bg-[#101827]"
         >
           <FaPlus />
           Add Category
@@ -81,7 +41,7 @@ export default function CategoriesPage() {
 
       {/* Search */}
 
-      <div className="mb-6 border border-[#e5e2dc] bg-white p-5 shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+      <div className="mb-6 border border-[#E5E7EB] bg-white p-5 shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
         <div className="relative max-w-md">
           <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
 
@@ -90,17 +50,17 @@ export default function CategoriesPage() {
             placeholder="Search category..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-[#e5e2dc] py-3 pl-11 pr-4 outline-none focus:border-[#ef6c2f]"
+            className="w-full border border-[#E5E7EB] py-3 pl-11 pr-4 outline-none focus:border-[#6C3FEA]"
           />
         </div>
       </div>
 
       {/* Table */}
 
-      <div className="overflow-hidden border border-[#e5e2dc] bg-white shadow-[0_8px_24px_rgba(21,21,21,0.04)]">
+      <div className="overflow-hidden border border-[#E5E7EB] bg-white shadow-[0_8px_24px_rgba(16,24,39,0.04)]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#f7f6f2]">
+            <thead className="bg-[#F8F9FC]">
               <tr className="text-left text-gray-600">
                 <th className="px-6 py-4 ">Image</th>
 
@@ -108,68 +68,76 @@ export default function CategoriesPage() {
 
                 <th className="px-6 py-4 ">Slug</th>
 
-                <th className="px-6 py-4 ">Products</th>
+                <th className="px-6 py-4 ">Description</th>
 
                 <th className="px-6 py-4 ">Status</th>
-
-                <th className="px-6 py-4 ">Created</th>
-
-                <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {data?.data.map((category) => (
-                <tr
-                  key={category._id}
-                  className="border-t hover:bg-gray-200 transition"
-                >
-                  <td>
-                    <Image
-                      src={category.thumbnail}
-                      alt={category.name}
-                      width={70}
-                      height={70}
-                      className="rounded object-cover"
-                    />
-                  </td>
-
-                  <td className="px-6 py-4 font-semibold text-gray-500">
-                    {category.name}
-                  </td>
-
-                  <td className="px-6 py-4 text-gray-500">{category.slug}</td>
-
-                  <td className="px-6 py-4 text-gray-500">
-                    {category.products}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        category.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-600"
-                      }`}
-                    >
-                      {category.status}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4 text-gray-500 bg-amber-200">
-                    {category.createdAt}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center">
-                      <button className="flex items-center gap-2 bg-[#ef6c2f] px-4 py-2 font-bold text-white transition hover:bg-[#151515]">
-                        <FaEdit />
-                        Update
-                      </button>
-                    </div>
+              {isLoading && (
+                <tr>
+                  <td className="px-6 py-8 text-gray-500" colSpan={5}>
+                    Loading categories...
                   </td>
                 </tr>
-              ))}
+              )}
+              {isError && (
+                <tr>
+                  <td className="px-6 py-8 text-red-700" colSpan={5}>
+                    Could not load categories.
+                  </td>
+                </tr>
+              )}
+              {!isLoading &&
+                !isError &&
+                filtered.map((category) => (
+                  <tr
+                    key={category._id}
+                    className="border-t hover:bg-gray-200 transition"
+                  >
+                    <td>
+                      {category.thumbnail && (
+                        <Image
+                          src={category.thumbnail}
+                          alt={category.name}
+                          width={70}
+                          height={70}
+                          className="rounded object-cover"
+                        />
+                      )}
+                    </td>
+
+                    <td className="px-6 py-4 font-semibold text-gray-500">
+                      {category.name}
+                    </td>
+
+                    <td className="px-6 py-4 text-gray-500">{category.slug}</td>
+
+                    <td className="px-6 py-4 text-gray-500">
+                      {category.description || "-"}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          category.isActive
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-600"
+                        }`}
+                      >
+                        {category.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              {!isLoading && !isError && filtered.length === 0 && (
+                <tr>
+                  <td className="px-6 py-8 text-gray-500" colSpan={5}>
+                    No categories found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -179,26 +147,8 @@ export default function CategoriesPage() {
 
       <div className="flex justify-between items-center mt-6">
         <p className="text-gray-500">
-          Showing 1 - {filtered.length} of {sampleCategories.length}
+          Showing {filtered.length} of {categories.length} categories
         </p>
-
-        <div className="flex gap-2">
-          <button className="border px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-300">
-            Previous
-          </button>
-
-          <button className="bg-[#ef6c2f] px-4 py-2 font-bold text-white">
-            1
-          </button>
-
-          <button className="border px-4 py-2 rounded-lg hover:bg-gray-300 text-gray-500">
-            2
-          </button>
-
-          <button className="border px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-300">
-            Next
-          </button>
-        </div>
       </div>
     </div>
   );
